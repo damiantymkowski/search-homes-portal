@@ -4,19 +4,18 @@ import {
     Route,
     Link,Switch
 } from 'react-router-dom';
-
 import Register from './pages/Register/Register';
 
-class App extends Component {
-    render() {
-        return (
-            <Router>
-                <Switch>
-                    <Route path={"/a"} exact component={Register} />
-                </Switch>
-            </Router>
+function App() {
+    return (
+        <Router>
+            <Switch>
+                <Route path="/rejestracja">
+                    <Register />
+                </Route>
+            </Switch>
+        </Router>
     );
-    }
 }
 
 export default App;
