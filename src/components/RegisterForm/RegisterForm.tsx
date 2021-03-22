@@ -3,9 +3,16 @@ import * as Styled from "./style.styles";
 import useForm from "../../hooks/useForm";
 
 const RegisterForm = () => {
-  const { inputs, handleInputChange, handleSubmit, errors } = useForm({
+  const {
+    inputs,
+    handleInputChange,
+    handleSubmit,
+    errors,
+    registerInfo,
+  } = useForm({
     email: "",
     password: "",
+    repeatPassword: "",
   });
   return (
     <>
@@ -17,21 +24,22 @@ const RegisterForm = () => {
               name="email"
               type="email"
               onChange={handleInputChange}
-            ></Styled.Input>
+            />
           </Styled.InputContainer>
-          {errors.email}
+          <Styled.ErrorText>{errors.email}</Styled.ErrorText>
           <Styled.InputContainer>
             <Styled.InputText>Hasło</Styled.InputText>
+            <Styled.Input name="password" onChange={handleInputChange} />
+          </Styled.InputContainer>
+          <Styled.ErrorText>{errors.password}</Styled.ErrorText>
+          <Styled.InputContainer>
+            <Styled.InputText>Powtórz hasło</Styled.InputText>
             <Styled.Input
-              name="password"
+              name="repeatPassword"
               onChange={handleInputChange}
             ></Styled.Input>
           </Styled.InputContainer>
-          {errors.password}
-          <Styled.InputContainer>
-            <Styled.InputText>Powtórz hasło</Styled.InputText>
-            <Styled.Input onChange={handleInputChange}></Styled.Input>
-          </Styled.InputContainer>
+          <Styled.ErrorText>{errors.repeatPassword}</Styled.ErrorText>
           <Styled.PolicyText>
             Klikając przycisk Zarejestruj się, akceptuję Regulamin.
           </Styled.PolicyText>
@@ -45,7 +53,7 @@ const RegisterForm = () => {
             reklam, jak również ochrony przed spamem, złośliwym oprogramowaniem
             i nieuprawnionym korzystaniem z naszych usług.
           </Styled.PolicyText>
-          <Styled.InputContainer>
+          <Styled.PolicyContainer>
             <Styled.PolicyCheckbox type={"checkbox"}></Styled.PolicyCheckbox>
             <Styled.PolicyText>
               Wyrażam zgodę na używanie przez Grupę nowyDom.pl sp. z o.o.
@@ -54,11 +62,12 @@ const RegisterForm = () => {
               oraz prowadzenia marketingu (np. newsletter, wiadomości SMS) przez
               nowyDom.pl sp. z o.o., podmioty powiązane i partnerów biznesowych.
             </Styled.PolicyText>
-          </Styled.InputContainer>
+          </Styled.PolicyContainer>
 
           <Styled.RegisterButton type="submit">
             Zarejestruj się
           </Styled.RegisterButton>
+          {registerInfo}
         </Styled.Form>
       </Styled.Box>
     </>
