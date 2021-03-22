@@ -8,6 +8,9 @@ const Register = () => {
     <>
       <Header />
       <Styled.Container>
+        <Styled.HeaderRegister>
+          <Styled.HeaderText>Zarejestruj się</Styled.HeaderText>
+        </Styled.HeaderRegister>
         <RegisterForm />
       </Styled.Container>
     </>
