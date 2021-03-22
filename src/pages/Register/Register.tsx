@@ -1,5 +1,6 @@
 import RegisterForm from "../../components/RegisterForm/RegisterForm";
 import * as Styled from "./style.styles";
+import Header from "../../components/Header/Header";
 
 const Register = () => {
   return (
