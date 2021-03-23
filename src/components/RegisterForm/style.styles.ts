@@ -6,7 +6,8 @@ export const Box = styled.div`
   width: 75%;
   margin-top: 30px;
   background-color: ${Colors.deep_cove};
-  min-height: 500px;
+  min-height: 400px;
+  margin-bottom: 80px;
   @media (max-width: 720px) {
     width: 95%;
   }
@@ -15,7 +16,7 @@ export const Box = styled.div`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  padding: 110px;
+  padding: 50px;
   @media (max-width: 720px) {
     padding: 20px;
   }
@@ -55,6 +56,8 @@ export const InputText = styled.label`
 
 export const Input = styled.input`
   width: 100%;
+  border-radius: 3px;
+  border: none;
   height: 35px;
 `;
 
@@ -110,6 +113,7 @@ export const PolicyCheckbox = styled.input`
 
 export const RegisterButton = styled.button`
   height: 35px;
+  border-radius: 3px;
   margin-top: 25px;
   cursor: pointer;
   width: 48%;
@@ -129,4 +133,10 @@ export const ErrorText = styled.span`
   color: ${Colors.caramine_pink};
   margin-left: 10.2%;
   margin-top: 5px;
+`;
+
+export const InfoText = styled.span`
+  color: ${Colors.pure_apple};
+  margin-left: 11%;
+  margin-top: 15px;
 `;

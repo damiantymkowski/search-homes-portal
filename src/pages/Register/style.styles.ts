@@ -12,7 +12,7 @@ export const Container = styled.div`
 export const HeaderRegister = styled.header`
   width: 100%;
   background-color: #d0d4d9;
-  margin-top: 20px;
+  margin-top: 10px;
   height: 80px;
   display: flex;
   align-items: center;

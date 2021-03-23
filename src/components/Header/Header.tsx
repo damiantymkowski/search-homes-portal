@@ -11,10 +11,6 @@ const Header = () => {
           <Styled.NavItem>
             Ogłoszenia <Styled.Caret />
           </Styled.NavItem>
-          <Styled.NavItem>
-            Popularne miejsca
-            <Styled.Caret />
-          </Styled.NavItem>
         </Styled.Navbar>
       </Styled.Nav>
     </>

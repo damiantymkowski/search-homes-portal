@@ -21,6 +21,7 @@ const RegisterForm = () => {
           <Styled.InputContainer>
             <Styled.InputText>Email</Styled.InputText>
             <Styled.Input
+              required
               name="email"
               type="email"
               onChange={handleInputChange}
@@ -29,13 +30,20 @@ const RegisterForm = () => {
           <Styled.ErrorText>{errors.email}</Styled.ErrorText>
           <Styled.InputContainer>
             <Styled.InputText>Hasło</Styled.InputText>
-            <Styled.Input name="password" onChange={handleInputChange} />
+            <Styled.Input
+              required
+              type="password"
+              name="password"
+              onChange={handleInputChange}
+            />
           </Styled.InputContainer>
           <Styled.ErrorText>{errors.password}</Styled.ErrorText>
           <Styled.InputContainer>
             <Styled.InputText>Powtórz hasło</Styled.InputText>
             <Styled.Input
+              required
               name="repeatPassword"
+              type="password"
               onChange={handleInputChange}
             ></Styled.Input>
           </Styled.InputContainer>
@@ -54,7 +62,10 @@ const RegisterForm = () => {
             i nieuprawnionym korzystaniem z naszych usług.
           </Styled.PolicyText>
           <Styled.PolicyContainer>
-            <Styled.PolicyCheckbox type={"checkbox"}></Styled.PolicyCheckbox>
+            <Styled.PolicyCheckbox
+              required
+              type={"checkbox"}
+            ></Styled.PolicyCheckbox>
             <Styled.PolicyText>
               Wyrażam zgodę na używanie przez Grupę nowyDom.pl sp. z o.o.
               środków komunikacji elektronicznej oraz telekomunikacyjnych
@@ -67,7 +78,7 @@ const RegisterForm = () => {
           <Styled.RegisterButton type="submit">
             Zarejestruj się
           </Styled.RegisterButton>
-          {registerInfo}
+          <Styled.InfoText>{registerInfo}</Styled.InfoText>
         </Styled.Form>
       </Styled.Box>
     </>
