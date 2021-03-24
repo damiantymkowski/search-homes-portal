@@ -8,6 +8,9 @@ const Login = () => {
     <>
       <Header />
       <Styled.Container>
+        <Styled.HeaderLogin>
+          <Styled.HeaderText>Logowanie</Styled.HeaderText>
+        </Styled.HeaderLogin>
         <LoginForm />
       </Styled.Container>
     </>
