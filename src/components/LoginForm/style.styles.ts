@@ -15,6 +15,7 @@ export const Box = styled.div`
 `;
 export const InputContainer = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
   margin-top: 35px;
   width: 100%;
@@ -56,7 +57,7 @@ export const Form = styled.form`
 export const LoginButton = styled.button`
   height: 35px;
   border-radius: 3px;
-  margin-top: 35px;
+  margin-top: 15px;
   cursor: pointer;
   width: calc(100% - 45px);
   margin-left: 45px;
@@ -78,4 +79,28 @@ export const LoginInfo = styled.span`
   @media (max-width: 1000px) {
     margin-left: unset;
   }
+`;
+
+export const ShowPassword = styled.div`
+  position: absolute;
+  left: calc(100% - 45px);
+  color: ${Colors.deep_cove};
+  @media (max-width: 1000px) {
+    top: 25px;
+  }
+`;
+
+export const ShowPasswordBtn = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  border: none;
+  outline: none;
+`;
+
+export const forgotPassword = styled.span`
+  margin-left: 45px;
+  margin-top: 10px;
+  font-size: 13px;
+  text-decoration: underline;
 `;
