@@ -1,8 +1,8 @@
-import React from "react";
+import React, { MutableRefObject, useRef, useState } from "react";
 import * as Styled from "./style.styles";
-import Logo from "../../assets/img/Logo.svg";
 import useLogin from "../../hooks/useLogin";
 import useAuth from "../../hooks/useAuth";
+import { Eye, EyeOff } from "react-feather";
 
 const LoginForm = () => {
   const { handleInputChange, handleSubmit, loginInfo } = useLogin({
@@ -10,6 +10,18 @@ const LoginForm = () => {
     password: "",
   });
   const { isLogged } = useAuth();
+  const [displayPassword, setDisplayPassword] = useState(false);
+  const passwordInput = useRef() as MutableRefObject<HTMLInputElement>;
+
+  const showPassword = () => {
+    if (!displayPassword) {
+      passwordInput.current.type = "text";
+      setDisplayPassword(true);
+    } else {
+      passwordInput.current.type = "password";
+      setDisplayPassword(false);
+    }
+  };
 
   if (!isLogged) {
     return (
@@ -29,9 +41,15 @@ const LoginForm = () => {
                 onChange={handleInputChange}
                 type="password"
                 name="password"
+                ref={passwordInput}
               ></Styled.Input>
+              <Styled.ShowPassword>
+                <Styled.ShowPasswordBtn onClick={showPassword}>
+                  {displayPassword ? <EyeOff /> : <Eye />}
+                </Styled.ShowPasswordBtn>
+              </Styled.ShowPassword>
             </Styled.InputContainer>
-
+            <Styled.forgotPassword>Nie pamiętam hasła</Styled.forgotPassword>
             <Styled.LoginButton>Zaloguj się</Styled.LoginButton>
             <Styled.LoginInfo>{loginInfo}</Styled.LoginInfo>
           </Styled.Form>
