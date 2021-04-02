@@ -6,7 +6,6 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #ebecee;
 `;
 export const HeaderLogin = styled.header`
   width: 100%;
@@ -23,4 +22,14 @@ export const HeaderText = styled.span`
   font-weight: 700;
   font-size: 1.5em;
   margin-left: 10%;
+`;
+
+export const LoginBox = styled.div`
+  background-color: #ebecee;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 35px;
+  align-items: center;
 `;

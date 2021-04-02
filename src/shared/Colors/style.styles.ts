@@ -6,4 +6,5 @@ export const Colors = {
   pure_apple: "#6ab04c",
   caramine_pink: "#eb4d4b",
   lightRed: "#de5656",
+  deepWhite: "#f8f8f8",
 };
