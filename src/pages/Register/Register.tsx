@@ -1,14 +1,15 @@
 import React from "react";
 import Header from "../../components/Header/Header";
-import RegisterForm from "../../components/RegisterForm/RegisterForm";
+import RegisterForm from "../../components/Forms/RegisterForm/RegisterForm";
 import * as Styled from "./style.styles";
 import Footer from "../../components/Footer/Footer";
+import * as Global from "../../shared/Global/style.styles";
 
 const Register = () => {
   return (
     <>
       <Header />
-      <Styled.Container>
+      <Global.Container>
         <Styled.RegisterBox>
           <Styled.HeaderRegister>
             <Styled.HeaderText>Zarejestruj się</Styled.HeaderText>
@@ -16,7 +17,7 @@ const Register = () => {
           <RegisterForm />
         </Styled.RegisterBox>
         <Footer />
-      </Styled.Container>
+      </Global.Container>
     </>
   );
 };
