@@ -1,14 +1,5 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background-color: #ebecee;
-`;
-
 export const HeaderRegister = styled.header`
   width: 100%;
   background-color: #d0d4d9;
@@ -24,4 +15,14 @@ export const HeaderText = styled.span`
   font-weight: 700;
   font-size: 1.5em;
   margin-left: 10%;
+`;
+
+export const RegisterBox = styled.span`
+  background-color: #ebecee;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 35px;
+  align-items: center;
 `;

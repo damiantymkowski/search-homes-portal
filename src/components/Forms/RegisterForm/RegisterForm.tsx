@@ -1,6 +1,6 @@
 import React from "react";
 import * as Styled from "./style.styles";
-import useForm from "../../hooks/useForm";
+import useRegister from "../../../hooks/useRegister";
 
 const RegisterForm = () => {
   const {
@@ -9,7 +9,7 @@ const RegisterForm = () => {
     handleSubmit,
     errors,
     registerInfo,
-  } = useForm({
+  } = useRegister({
     email: "",
     password: "",
     repeatPassword: "",

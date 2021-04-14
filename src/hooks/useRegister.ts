@@ -7,7 +7,7 @@ interface initialValues {
   repeatPassword: string;
 }
 
-const useForm = (initialValues: initialValues) => {
+const useRegister = (initialValues: initialValues) => {
   const [inputs, setInputs] = useState(initialValues);
   const [errors, setErrors] = useState(initialValues);
   const [isFirst, setIsFirst] = useState(true);
@@ -55,7 +55,7 @@ const useForm = (initialValues: initialValues) => {
     validate(inputs, "Submit");
     axios({
       method: "post",
-      url: "http://localhost/nowydom_server/registrationLogging.php",
+      url: "/registrationLogging.php",
       data: {
         email: inputs.email,
         password: inputs.password,
@@ -92,4 +92,4 @@ const useForm = (initialValues: initialValues) => {
   };
 };
 
-export default useForm;
+export default useRegister;

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 interface initialValues {
   email: string;
@@ -15,7 +17,7 @@ const useLogin = (initialValues: initialValues) => {
   const handleSubmit = (e: React.FormEvent) => {
     axios({
       method: "post",
-      url: "http://localhost/nowydom_server/registrationLogging.php",
+      url: "registrationLogging.php",
       headers: {
         "Content-Type": "application/json",
       },
@@ -26,12 +28,18 @@ const useLogin = (initialValues: initialValues) => {
       },
       withCredentials: true,
     }).then((response) => {
+      console.log(response);
+      if (response.data.response == "noUser")
+        setLoginInfo("Brak takiego Użytkownika!");
       const cookies = new Cookies();
       if (response.data.response === "successLogin") {
         cookies.set("Logged", true, { path: "/" });
         setLoginInfo("Pomyślnie zalogowano!");
-      } else cookies.set("Logged", false, { path: "/" });
+      } else {
+        cookies.set("Logged", false, { path: "/" });
+      }
     });
+
     e ? e.preventDefault() : console.log(inputs);
   };
 
