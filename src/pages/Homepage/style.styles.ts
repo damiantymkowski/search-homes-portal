@@ -27,4 +27,5 @@ export const SectionText = styled.span<TextProps>`
   font-size: ${(props) => (props.small ? "1.4em" : "1.9em")};
   font-weight: ${(props) => (props.small ? "200" : "600")};
   word-break: break-all;
+  color: #fff;
 `;

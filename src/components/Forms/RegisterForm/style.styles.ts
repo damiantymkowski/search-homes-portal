@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Colors } from "../../shared/Colors/style.styles";
+import { Colors } from "../../../shared/Colors/style.styles";
 
 export const Box = styled.div`
   display: flex;
@@ -7,6 +7,7 @@ export const Box = styled.div`
   margin-top: 30px;
   background-color: ${Colors.deep_cove};
   min-height: 400px;
+  color: ${Colors.white};
   margin-bottom: 80px;
   @media (max-width: 720px) {
     width: 95%;

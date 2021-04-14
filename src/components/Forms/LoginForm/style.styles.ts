@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Colors } from "../../shared/Colors/style.styles";
+import { Colors } from "../../../shared/Colors/style.styles";
 
 export const Box = styled.div`
   display: flex;

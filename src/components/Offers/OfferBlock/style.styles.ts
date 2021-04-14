@@ -11,6 +11,7 @@ export const Box = styled.div`
   -webkit-box-shadow: inset -3px 1px 37px 5px rgba(0, 0, 0, 0.68);
   box-shadow: inset -3px 1px 37px 5px rgba(0, 0, 0, 0.68);
   flex-direction: column;
+  color: #fff;
 `;
 
 export const Price = styled.span`
