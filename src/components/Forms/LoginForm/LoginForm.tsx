@@ -1,17 +1,24 @@
-import React, { MutableRefObject, useRef, useState } from "react";
+import React, {
+  MutableRefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import * as Styled from "./style.styles";
-import useLogin from "../../hooks/useLogin";
-import useAuth from "../../hooks/useAuth";
+import useLogin from "../../../hooks/useLogin";
 import { Eye, EyeOff } from "react-feather";
+import { SessionContext } from "../../../App";
+import { Redirect, useHistory } from "react-router-dom";
 
 const LoginForm = () => {
   const { handleInputChange, handleSubmit, loginInfo } = useLogin({
     email: "",
     password: "",
   });
-  const { isLogged } = useAuth();
   const [displayPassword, setDisplayPassword] = useState(false);
   const passwordInput = useRef() as MutableRefObject<HTMLInputElement>;
+  const session = useContext(SessionContext);
 
   const showPassword = () => {
     if (!displayPassword) {
@@ -22,8 +29,9 @@ const LoginForm = () => {
       setDisplayPassword(false);
     }
   };
+  console.log(session);
 
-  if (!isLogged) {
+  if (session === false && loginInfo == "") {
     return (
       <>
         <Styled.Box>
@@ -57,7 +65,7 @@ const LoginForm = () => {
       </>
     );
   } else {
-    return <>Jesteś już zalogowany!</>;
+    return <Redirect to="/" />;
   }
 };
 
