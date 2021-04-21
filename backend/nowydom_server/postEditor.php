@@ -49,37 +49,139 @@
 		}
 		else if ($jsonDecoded -> action == "savePostNew") ////////zapisanie nowego postu
 		{
-			$s -> $pdo -> prepare('INSERT INTO offers (title, date, description, miniature, authorId) VALUES (:title, :date, :description, :miniature, :authorId)');
-			$s -> bindValues(":title", $jsonDecoded -> title);
-			$s -> bindValues(":date", time());
-			$s -> bindValues(":description", $jsonDecoded -> description);
-			$s -> bindValues(":miniature", $jsonDecoded -> miniature);
-			$s -> bindValues(":authorId", $_SESSION['id']);
-			$s -> execute();
+			$vp = validateParameters($jsonDecoded -> params);
+			
+			if ($vp == 1)
+			{
+				$response = "lackRequired"; //brak któregoś z wymaganych parametrów
+			}
+			else if ($vp == 2)
+			{
+				$response = "badParam"; //któryś parametr jest nieuzupełniony albo jest złego typu
+			}
+			else
+			{
+				//parametry są poprawne
+				
+				$s = $pdo -> prepare('INSERT INTO offers (title, date, description, miniature, authorId) VALUES (:title, :date, :description, :miniature, :authorId)');
+				$s -> bindValues(":title", $jsonDecoded -> title);
+				$s -> bindValues(":date", time());
+				$s -> bindValues(":description", $jsonDecoded -> description);
+				$s -> bindValues(":miniature", $jsonDecoded -> miniature);
+				$s -> bindValues(":authorId", $_SESSION['id']);
+				$s -> execute();
 
-			//$s -> $pdo -> prepare('INSERT INTO datavalues (nameId, offerId, value)');
-			//$s -> bindValue(":nameId");
-			//$s -> bindValue(":offerId");
-			//$s -> bindValue(":value");
-			//$s -> execute();
+				if (insertParameters ($pdo -> lastInsertId(), $jsonDecoded -> params) == 0)
+				{
+					$response = "postAdded";
+				}
+				else
+				{
+					$response = "veryBadThingHappened";//nieoczekiwany błąd
+				}
 
-			$response = "postAdded";
+			}
 		}
 		else if ($jsonDecoded -> action == "savePostEdited")  ////////zapisanie edytowanego postu
 		{
-			$s -> $pdo -> prepare('UPDATE offers SET title = :title, date = :date, description = :description, miniature = :miniature');
-			$s -> bindValues(":title", $jsonDecoded -> title);
-			$s -> bindValues(":description", $jsonDecoded -> description);
-			$s -> bindValues(":miniature", $jsonDecoded -> miniature);
-			$s -> execute();
+			$vp = validateParameters($jsonDecoded -> params);
+			
+			if ($vp == 1)
+			{
+				$response = "lackRequired"; //brak któregoś z wymaganych parametrów
+			}
+			else if ($vp == 2)
+			{
+			    $response = "badParam";	//któryś parametr jest nieuzupełniony albo jest złego typu
+			}
+			else
+			{
+				$s = $pdo -> prepare('UPDATE offers SET title = :title, date = :date, description = :description, miniature = :miniature');
+				$s -> bindValues(":title", $jsonDecoded -> title);
+				$s -> bindValues(":description", $jsonDecoded -> description);
+				$s -> bindValues(":miniature", $jsonDecoded -> miniature);
+				$s -> execute();
 
-			$response = "postEdited";
+				if (insertParameters ($pdo -> lastInsertId(), $jsonDecoded -> params) == 0)
+				{
+					$response = "postEdited";
+				}
+				else
+				{
+					$response = "veryBadThingHappened";
+				}
+			}
+			
 		}
 	}
-	else $response = "notLogged";
+	else
+	{
+		$response = "notLogged";
+	}
 	
 	echo json_encode(array('response' => $response, 'parameters' => $parameters, 'postInfo' => $postInfo, 'dataInfo' => $dataInfo));
 	
+	function insertParameters ($offerId, $parametersArray)
+	{
+		//offerId - id oferty
+		//tablica "parametersArray": klucz jest identyfikatorem parametru w bazie, a wartość to wartość parametru
+		//usuwamy obecne dla danej oferty parametry i wpisujemy nowe
+
+		$s = $pdo -> prepare ('DELETE FROM datavalues WHERE offerID = :offerId');
+		$s -> bindValue(":offerId", $offerId);
+		$s -> execute();
+		
+
+		$s = $pdo -> prepare('INSERT INTO datavalues (nameId, offerId, value)');
+		foreach ($parametersArray as $key => $value)
+		{
+			$s -> bindValue(":nameId", $key);
+			$s -> bindValue(":offerId", $offerId);
+			$s -> bindValue(":value", $value);
+			$s -> execute();
+		}
+		if ($s -> rowCount() == count($parametersArray))
+			return 0;
+		else
+			return 1;
+	}
+	function validateParameters ($parametersArray)
+	{
+		global $pdo;
+		//parametry: tablica "parametersArray": klucz jest identyfikatorem parametru w bazie, a wartość to wartość parametru
+			
+		//sprawdzanie poprawności wpisanych parametrów
+		//	sprawdzanie, czy wszystkie wymagane parametry są obecne
+		$s = $pdo -> prepare('SELECT id FROM datanames WHERE required = 1') -> execute();
+		
+		while ($ids = $s -> fetch())
+		{
+			//jeżeli brak któregoś z wymaganych parametrów
+			if (!isset ($parametersArray[$ids]))
+				return 1;
+		}
+		
+		//	sprawdzenie, czy parametry są odpowiedniego typu (czy są liczbowe, czy są uzupełnione)
+		$s = $pdo -> prepare('SELECT id, regex FROM datanames') -> execute();
+		
+		while ($ids = $s -> fetch())
+		{
+			if (isset ($parametersArray[$ids[0]]))
+			{
+				if (!strlen(trim($parametersArray[$ids[0]])) > 0)	//pusty ciąg znakowy
+					return 2;
+					
+					if ($ids[1] != 'NULL')      //jeżeli nie jest predefiniowany (NULL)
+					{
+						if (!preg_match($ids[1], $parametersArray[$ids[0]]))    //jeżeli nie pasuje do wzorca    
+						{
+							return 2;
+						}
+					}
+			}
+		}
+		return 0;
+	}
 	function getParameters()
 	{
 		global $pdo;
@@ -89,7 +191,7 @@
 		$t = $pdo -> prepare('SELECT value FROM predefinedvalues WHERE nameId = :nameId');
 		while($d = $s -> fetch(PDO::FETCH_ASSOC))
 		{
-			if ($d["type"] == "predefined")
+			if ($d["regex"] == "NULL")
 			{
 				$t -> bindValue(':nameId', $d["id"]);
 				$t -> execute();
