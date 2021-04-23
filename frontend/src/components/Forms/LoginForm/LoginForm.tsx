@@ -1,15 +1,14 @@
 import React, {
   MutableRefObject,
-  useContext,
-  useEffect,
+  useContext, useReducer,
   useRef,
   useState,
 } from "react";
 import * as Styled from "./style.styles";
 import useLogin from "../../../hooks/useLogin";
 import { Eye, EyeOff } from "react-feather";
-import { SessionContext } from "../../../App";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import {initialState, reducer} from "../../../shared/Reducers/AuthReducer";
 
 const LoginForm = () => {
   const { handleInputChange, handleSubmit, loginInfo } = useLogin({
@@ -18,7 +17,6 @@ const LoginForm = () => {
   });
   const [displayPassword, setDisplayPassword] = useState(false);
   const passwordInput = useRef() as MutableRefObject<HTMLInputElement>;
-  const session = useContext(SessionContext);
 
   const showPassword = () => {
     if (!displayPassword) {
@@ -29,9 +27,9 @@ const LoginForm = () => {
       setDisplayPassword(false);
     }
   };
+  const [state] = useReducer(reducer, initialState);
 
-
-  if (session === false && loginInfo != "Pomyślnie zalogowano!") {
+  if (state.isAuthenticated === false && loginInfo != "Pomyślnie zalogowano!") {
     return (
       <>
         <Styled.Box>

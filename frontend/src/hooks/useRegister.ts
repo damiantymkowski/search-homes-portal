@@ -55,7 +55,7 @@ const useRegister = (initialValues: initialValues) => {
     validate(inputs, "Submit");
     axios({
       method: "post",
-      url: "/registrationLogging.php",
+      url: "registrationLogging.php",
       data: {
         email: inputs.email,
         password: inputs.password,

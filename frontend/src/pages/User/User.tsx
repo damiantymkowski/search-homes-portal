@@ -6,9 +6,6 @@ import * as Global from "../../shared/Global/style.styles";
 import ChangePasswordForm from "../../components/Forms/ChangePasswordForm/ChangePasswordForm";
 import ChangeEmailForm from "../../components/Forms/ChangeEmailForm/ChangeEmailForm";
 import ChangeUserDetailsForm from "../../components/Forms/ChangeUserDetailsForm/ChangeUserDetailsForm";
-import { SessionContext } from "../../App";
-import axios from "axios";
-import Cookies from "js-cookie";
 
 const User = () => {
   return (

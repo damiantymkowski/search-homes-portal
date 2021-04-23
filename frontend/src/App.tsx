@@ -1,28 +1,31 @@
-import React, { Component, useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import Homepage from "./pages/Homepage/Homepage";
 import User from "./pages/User/User";
-import { getSessionCookie } from "./shared/sessions";
 import ProtectedRoute from "./shared/ProtectedRoute";
 import { AnimatePresence } from "framer-motion";
 import Offer from "./pages/Offer/Offer";
-export const SessionContext = React.createContext(getSessionCookie());
+import Logout from "./components/Logout/Logout";
+import {initialState, reducer} from "./shared/Reducers/AuthReducer";
+
+type ContextType = {
+  state: any,
+  dispatch: React.Dispatch<any>
+}
+
+export const AuthContext = React.createContext<ContextType>({state: "", dispatch: () => null});
 
 function App() {
-  const [session, setSession] = useState(getSessionCookie());
-  useEffect(() => {
-    setSession(getSessionCookie());
-  }, [session]);
-
+  const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
-    <SessionContext.Provider value={session}>
+    <AuthContext.Provider value={{state,dispatch}}>
       <Router>
         <AnimatePresence>
           <Switch>
             <ProtectedRoute
-              session={session}
+              session={state.isAuthenticated}
               path="/mojekonto"
               component={User}
             />
@@ -30,10 +33,11 @@ function App() {
             <Route path="/rejestracja" component={Register} />
             <Route path="/logowanie" component={Login} />
             <Route path="/ogloszenie" component={Offer}/>
+            <Route path="/wyloguj" component={Logout}/>
           </Switch>
         </AnimatePresence>
       </Router>
-    </SessionContext.Provider>
+    </AuthContext.Provider>
   );
 }
 

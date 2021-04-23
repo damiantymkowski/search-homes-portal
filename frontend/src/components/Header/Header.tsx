@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useReducer, useState} from "react";
 import * as Styled from "./style.styles";
 import Logo from "../../assets/img/Logo.svg";
 import { Link } from "react-router-dom";
-import { getSessionCookie } from "../../shared/sessions";
+import Logout from "../Logout/Logout";
+import {AuthContext} from "../../App";
+
+
 
 const Header = () => {
-  const [session, setSession] = useState(getSessionCookie());
-  useEffect(() => {
-    setSession(getSessionCookie());
-  }, [session]);
-  if (session === false) {
+const {state} = React.useContext(AuthContext);
+
+  if (state.isAuthenticated === false) {
     return (
       <>
         <Styled.Nav>
@@ -54,7 +55,7 @@ const Header = () => {
               <Link to="/rejestracja">Dodaj ogłoszenie</Link>
             </Styled.NavItem>
             <Styled.NavItem>
-              <Link to="/wyloguj">Wyloguj się</Link>
+           <Logout/>
             </Styled.NavItem>
           </Styled.Navbar>
         </Styled.Nav>
