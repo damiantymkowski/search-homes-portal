@@ -62,9 +62,11 @@ const useRegister = (initialValues: initialValues) => {
         action: "registration",
       },
     }).then((response) => {
+      console.log(response);
       if (response.data.response == "badData")
         setRegisterInfo("Wprowadzono nieprawidłowe dane, popraw formularz");
       else setRegisterInfo("Zarejestrowano nowe konto!");
+
     });
     e ? e.preventDefault() : console.log(inputs);
   };
