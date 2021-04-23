@@ -3,15 +3,16 @@ import styled from "styled-components";
 export const Footer = styled.footer`
   display: flex;
   color: #000;
-  width: 35%;
+  width: 100%;
   margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: 50px;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Brand = styled.div`
   font-size: 2em;
+  margin-right: 250px;
 `;
 
 export const Box = styled.div`

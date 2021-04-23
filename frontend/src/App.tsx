@@ -7,6 +7,7 @@ import User from "./pages/User/User";
 import { getSessionCookie } from "./shared/sessions";
 import ProtectedRoute from "./shared/ProtectedRoute";
 import { AnimatePresence } from "framer-motion";
+import Offer from "./pages/Offer/Offer";
 export const SessionContext = React.createContext(getSessionCookie());
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
             <Route exact path="/" component={Homepage} />
             <Route path="/rejestracja" component={Register} />
             <Route path="/logowanie" component={Login} />
+            <Route path="/ogloszenie" component={Offer}/>
           </Switch>
         </AnimatePresence>
       </Router>
