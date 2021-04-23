@@ -29,7 +29,7 @@ const LoginForm = () => {
       setDisplayPassword(false);
     }
   };
-  console.log(session);
+
 
   if (session === false && loginInfo != "Pomyślnie zalogowano!") {
     return (

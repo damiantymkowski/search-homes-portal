@@ -28,11 +28,13 @@ const useLogin = (initialValues: initialValues) => {
       },
       withCredentials: true,
     }).then((response) => {
-      console.log(response);
       if (response.data.response == "noUser")
         setLoginInfo("Brak takiego Użytkownika!");
       if (response.data.response === "successLogin") {
+        const cookies = new Cookies();
+        cookies.set('logged', true, { path: '/' });
         setLoginInfo("Pomyślnie zalogowano!");
+    console.log(response);
       }
     });
 
