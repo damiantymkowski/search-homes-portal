@@ -26,6 +26,7 @@
 	$parameters = "";
 	$postInfo = "";
 	$dataInfo = "";
+	$photosUrl = "";
 
 	if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) /////////////////////DODAWANIE I EDYCJA OGLOSZENIA
 	{
@@ -45,6 +46,11 @@
 			$s -> bindValue(':offerId', $jsonDecoded -> postId);
 			$s -> execute();
 			$dataInfo = $s -> fetch(PDO::FETCH_ASSOC);
+
+			$s -> $pdo -> prepare ('SELECT url FROM photos WHERE offerId = :id');
+			$s -> bindValue(':id',  $jsonDecoded -> postId);
+			$s -> execute();
+			$photosUrl = $s -> fetch(PDO::FETCH_ASSOC);
 			
 			$parameters = getParameters();
 			$response = "editPreview";
@@ -137,7 +143,6 @@
 					$response = "veryBadThingHappened";
 				}
 			}
-			
 		}
 	}
 	else
@@ -145,7 +150,7 @@
 		$response = "notLogged";
 	}
 	
-	echo json_encode(array('response' => $response, 'parameters' => $parameters, 'postInfo' => $postInfo, 'dataInfo' => $dataInfo));
+	echo json_encode(array('response' => $response, 'parameters' => $parameters, 'postInfo' => $postInfo, 'dataInfo' => $dataInfo, 'photosUrl' => $photosUrl));
 	
 	function insertParameters ($offerId, $parametersArray)
 	{
