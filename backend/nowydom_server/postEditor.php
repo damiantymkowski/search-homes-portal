@@ -10,6 +10,8 @@
 	//editPreview - zwrócono informacje do wyświetlenia przy edycji
 	//postAdded - dodano nowy post
 	//postEdited - zedytowano post
+	//zdjecia beda przechowywane w tablicy (adresy url w tablicy tekstow) 
+	//miniaturka jest pierwszym elementem tablicy
 	
 	session_start();
 
@@ -62,16 +64,26 @@
 			else
 			{
 				//parametry są poprawne
-				
+
 				$s = $pdo -> prepare('INSERT INTO offers (title, date, description, miniature, authorId) VALUES (:title, :date, :description, :miniature, :authorId)');
 				$s -> bindValues(":title", $jsonDecoded -> title);
 				$s -> bindValues(":date", time());
 				$s -> bindValues(":description", $jsonDecoded -> description);
-				$s -> bindValues(":miniature", $jsonDecoded -> miniature);
+				$s -> bindValues(":miniature", $jsonDecoded -> photos[0]);
 				$s -> bindValues(":authorId", $_SESSION['id']);
 				$s -> execute();
 
-				if (insertParameters ($pdo -> lastInsertId(), $jsonDecoded -> params) == 0)
+				$lastId = $pdo -> lastInsertId();
+
+				$s = $pdo -> prepare('INSERT INTO photos (offerId, url) VALUES (:offerId, :url)');
+				foreach($jsonDecoded->photos as $photo)
+				{	
+					$s -> bindValues(":offerId", $pdo -> lastInsertId());
+					$s -> bindValues(":url", $photo);
+					$s -> execute();
+				}
+
+				if (insertParameters ($lastId, $jsonDecoded -> params) == 0)
 				{
 					$response = "postAdded";
 				}
@@ -79,6 +91,7 @@
 				{
 					$response = "veryBadThingHappened";//nieoczekiwany błąd
 				}
+				
 
 			}
 		}
@@ -96,13 +109,26 @@
 			}
 			else
 			{
-				$s = $pdo -> prepare('UPDATE offers SET title = :title, date = :date, description = :description, miniature = :miniature');
+				$s = $pdo -> prepare('UPDATE offers SET title = :title, date = :date, description = :description, miniature = :miniature WHERE id = :id');
 				$s -> bindValues(":title", $jsonDecoded -> title);
 				$s -> bindValues(":description", $jsonDecoded -> description);
-				$s -> bindValues(":miniature", $jsonDecoded -> miniature);
+				$s -> bindValues(":miniature", $jsonDecoded -> photos[0]);
+				$s -> bindValues(":id", $jsonDecoded -> postId);
 				$s -> execute();
 
-				if (insertParameters ($pdo -> lastInsertId(), $jsonDecoded -> params) == 0)
+				$s = $pdo -> preapre ('DELETE FROM photos WHERE offerId = :id');   //usuwamy całość zdjęć
+				$s -> bindValues(":id", $jsonDecoded -> postId);
+				$s -> execute();
+
+				$s = $pdo -> prepare('INSERT INTO photos (offerId, url) VALUES (:offerId, :url)');         //dodajemy na nowo
+				foreach($jsonDecoded->photos as $photo)
+				{	
+					$s -> bindValues(":offerId", $jsonDecoded -> postId);
+					$s -> bindValues(":url", $photo);
+					$s -> execute();
+				}
+
+				if (insertParameters ($jsonDecoded -> postId, $jsonDecoded -> params) == 0)
 				{
 					$response = "postEdited";
 				}
