@@ -50,17 +50,13 @@
 		$x = $pdo -> prepare('SELECT * FROM offers WHERE date >= :timeCheck ORDER BY date DESC LIMIT :a,:b'); //posty według daty
 		$x -> bindValue(':a', $from);
 		$x -> bindValue(':b', $amount);
-		$x -> bindValue(':id', $_SESSION['id']);
 		$x -> bindValue(':timeCheck', time() - 2592000);
 		
 		$x -> execute();
 		
 		while($offers = $x -> fetch(PDO::FETCH_ASSOC))
 		{
-			//if ($offers['date'] >= time() - 2592000)  //Arek, to jest stare chyba i załatwione przez timeCheck w zapytaniu wyżej
-			//{
-				$actualOffers[] = $offers;
-			//}
+			$actualOffers[] = $offers;
 		}
 			
 		$response = "listingOffers";
