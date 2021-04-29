@@ -55,16 +55,18 @@ const useRegister = (initialValues: initialValues) => {
     validate(inputs, "Submit");
     axios({
       method: "post",
-      url: "/registrationLogging.php",
+      url: "registrationLogging.php",
       data: {
         email: inputs.email,
         password: inputs.password,
         action: "registration",
       },
     }).then((response) => {
+      console.log(response);
       if (response.data.response == "badData")
         setRegisterInfo("Wprowadzono nieprawidłowe dane, popraw formularz");
       else setRegisterInfo("Zarejestrowano nowe konto!");
+
     });
     e ? e.preventDefault() : console.log(inputs);
   };

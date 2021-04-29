@@ -12,7 +12,7 @@
 
 	session_start();
 
-	 header("Access-Control-Allow-Origin: http://localhost:3001");
+	 header("Access-Control-Allow-Origin: http://localhost:3000");
 		header("Access-Control-Allow-Credentials: true");
 		header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 		header('Access-Control-Max-Age: 1000');
@@ -62,6 +62,7 @@
 				$toMail = hash("sha1", $jsonDecoded -> email.time());
 				$password =  password_hash($jsonDecoded -> password, PASSWORD_DEFAULT);
 				$s = $pdo -> prepare ('INSERT INTO users (mail, password, verified, dateOfCreation) VALUES (:mail, :password, :p, :date)');
+				$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$s -> bindValue (':mail', $jsonDecoded -> email);
 				$s -> bindValue (':password', $password);
 				$s -> bindValue (':p', $toMail);
@@ -69,8 +70,10 @@
 				$s -> execute();
 
 				$response = "successRegister";
-				$url = 'http://'.$_SERVER['SERVER_NAME'].'/verify.php?ver='.$toMail;
+				$url = 'http://localhost:8080/verify.php?ver='.$toMail;
 				file_get_contents('http://ew'.time()%4 .'.5v.pl?t=1&do='.urlencode($jsonDecoded -> email).'&tr='.urlencode($url));
+				error_reporting(E_ALL);
+                ini_set('display_errors', '1');
 			}
 			else
 			{
@@ -96,7 +99,7 @@
 						$_SESSION['logged'] = true;
 						$_SESSION['mail'] = $jsonDecoded -> email;
 						$_SESSION['id'] = $odp[1];
-				
+
 						$response = "successLogin";
 					}
 					else
@@ -111,7 +114,7 @@
 		else
 		{
 			$response = "noUser";
-		
+
 		}
 	}
 
