@@ -9,6 +9,7 @@ import useLogin from "../../../hooks/useLogin";
 import { Eye, EyeOff } from "react-feather";
 import { Redirect } from "react-router-dom";
 import {initialState, reducer} from "../../../shared/Reducers/AuthReducer";
+import {AuthContext} from "../../../App";
 
 const LoginForm = () => {
   const { handleInputChange, handleSubmit, loginInfo } = useLogin({
@@ -27,8 +28,7 @@ const LoginForm = () => {
       setDisplayPassword(false);
     }
   };
-  const [state] = useReducer(reducer, initialState);
-
+  const {state} = React.useContext(AuthContext);
   if (state.isAuthenticated === false && loginInfo != "Pomyślnie zalogowano!") {
     return (
       <>

@@ -1,11 +1,13 @@
 import Cookies from "universal-cookie";
 
+const cookies = new Cookies();
+
 export const initialState = {
-    isAuthenticated: false,
+    isAuthenticated: !!cookies.get('logged'),
 }
 
 export const reducer = (state: any, action: { type: string }) =>{
-    const cookies = new Cookies();
+
     switch(action.type){
         case "LOGIN":
             cookies.set('logged', true, { path: '/' });

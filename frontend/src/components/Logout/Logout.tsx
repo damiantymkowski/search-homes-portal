@@ -7,12 +7,12 @@ import {AuthContext} from "../../App";
 import {initial, RegisterReducer} from "../../shared/Reducers/RegisterReducer";
 
 const Logout = () => {
-const [logged, setLogged] = useState(true);
 
 const {dispatch} = React.useContext(AuthContext);
-const [state, dispatchRegister] = React.useReducer(RegisterReducer, initial);
+const [infoStatus, dispatchInfo] = React.useReducer(RegisterReducer, initial);
+    const {state} = React.useContext(AuthContext);
 const onSubmit = () => {
-    dispatchRegister({
+    dispatchInfo({
         type: 'Loading',
         payload: true
     })
@@ -30,14 +30,11 @@ const onSubmit = () => {
         },
         withCredentials: true,
     }).then((response) => {
-            setLogged(false);
         dispatch({
             type:"LOGOUT",
             payload: response.data.response
         })
-            const cookies = new Cookies();
-            cookies.remove('logged');
-        dispatchRegister({
+        dispatchInfo({
             type: 'Loading',
             payload: false
         })
@@ -47,13 +44,13 @@ const onSubmit = () => {
 
 
 
-    if(logged && state.loading) {
+    if(infoStatus.loading) {
         return (
             <>
                 <Styled.LogoutButton onClick={onSubmit}><Styled.Loader/></Styled.LogoutButton>
             </>
         );
-    }else if(logged){
+    }else if(state.isAuthenticated){
         return (
             <>
                 <Styled.LogoutButton onClick={onSubmit}>Wyloguj się</Styled.LogoutButton>

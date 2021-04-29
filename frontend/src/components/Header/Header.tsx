@@ -5,11 +5,8 @@ import { Link } from "react-router-dom";
 import Logout from "../Logout/Logout";
 import {AuthContext} from "../../App";
 
-
-
 const Header = () => {
 const {state} = React.useContext(AuthContext);
-
   if (state.isAuthenticated === false) {
     return (
       <>

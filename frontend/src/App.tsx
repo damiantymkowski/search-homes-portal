@@ -9,6 +9,7 @@ import { AnimatePresence } from "framer-motion";
 import Offer from "./pages/Offer/Offer";
 import Logout from "./components/Logout/Logout";
 import {initialState, reducer} from "./shared/Reducers/AuthReducer";
+import AddOffer from "./pages/Offer/Add/AddOffer";
 
 type ContextType = {
   state: any,
@@ -28,6 +29,11 @@ function App() {
               session={state.isAuthenticated}
               path="/mojekonto"
               component={User}
+            />
+            <ProtectedRoute
+                session={state.isAuthenticated}
+                path="/dodaj-ogloszenie"
+                component={AddOffer}
             />
             <Route exact path="/" component={Homepage} />
             <Route path="/rejestracja" component={Register} />
