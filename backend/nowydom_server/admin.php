@@ -23,6 +23,7 @@
 	$response = "";
     $reportedOffers = array();
     $reportedMessages = array();
+    $adminsArray = array(); 
 
     if ($jsonDecoded -> action == 'loginAdmin') /////////////////Logowanie admina
     {
@@ -170,8 +171,31 @@
 
             $response = "bannedUser";
         }
+
+        if ($jsonDecoded -> action == 'printAdmins') //////////////Wyświetlanie kont 
+        {
+            $x -> $pdo -> prepare('SELECT position FROM admins WHERE userId = :id');
+            $x -> bindValue(":id", $_SESSION['idAdmin']);
+            $x -> execute();
+
+            $position = $x -> fetch()[0] == 0;
+
+            if ($position = 2)                             ////////////postion = 1 - admin, position = 0 - moderator
+            {
+                $x -> $pdo -> prepare('SELECT * FROM admins');
+                $x -> execute();
+
+                while($admins = $x -> fetch(PDO::FETCH_ASSOC))
+                {
+                    $adminsArray[] = $admins;
+                }
+                    
+                $response = "listingAdmins";
+            }
+            else $response = "notAuthorized";
+        }
     }   
     else $response = "notLoggedAdmin";   
 
-	echo json_encode(array('response' => $response, 'reportedOffers' => $reportedOffers, 'reportedMessages' => $reportedMessages));
+	echo json_encode(array('response' => $response, 'reportedOffers' => $reportedOffers, 'reportedMessages' => $reportedMessages, 'admins' => $adminsArray));
 ?>
