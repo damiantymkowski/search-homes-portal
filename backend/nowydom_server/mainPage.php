@@ -23,24 +23,44 @@
 
 	if ($jsonDecoded -> action == 'printOffers')////////////Wyświetlanie postów
 	{
-		if ($jsonDecoded -> amount > 100)
+		if (!isset ($jsonDecoded -> from) || !is_numeric ($jsonDecoded -> from))
 		{
-			$jsonDecoded -> amount = 100;
+			$from = 0;
 		}
-		
+
+		if (!isset ($jsonDecoded -> amount) || !is_numeric ($jsonDecoded -> amount)) 
+		{
+			$amount = 20;
+		}
+
+		if (isset ($jsonDecoded -> from) && is_numeric ($jsonDecoded -> from))
+		{
+			$from = $jsonDecoded -> from;
+		}
+
+		if (isset ($jsonDecoded -> amount) && is_numeric ($jsonDecoded -> amount))
+		{
+			if ($jsonDecoded -> amount > 100)
+			{
+				$jsonDecoded -> amount = 100;
+			}
+			$amount = $jsonDecoded -> amount;
+		}
+
 		$x = $pdo -> prepare('SELECT * FROM offers WHERE date >= :timeCheck ORDER BY date DESC LIMIT :a,:b'); //posty według daty
+		$x -> bindValue(':a', $from);
+		$x -> bindValue(':b', $amount);
 		$x -> bindValue(':id', $_SESSION['id']);
 		$x -> bindValue(':timeCheck', time() - 2592000);
-		$x -> bindValue(':a', $jsonDecoded -> from);
-		$x -> bindValue(':b', $jsonDecoded -> amount);
+		
 		$x -> execute();
 		
 		while($offers = $x -> fetch(PDO::FETCH_ASSOC))
 		{
-			if ($offers['date'] >= time() - 2592000)
-			{
+			//if ($offers['date'] >= time() - 2592000)  //Arek, to jest stare chyba i załatwione przez timeCheck w zapytaniu wyżej
+			//{
 				$actualOffers[] = $offers;
-			}
+			//}
 		}
 			
 		$response = "listingOffers";
