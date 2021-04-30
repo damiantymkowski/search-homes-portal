@@ -1,5 +1,5 @@
 <?php
-	//plik przyjmuje jsona w formie tablicy z kluczami: action, postId, from, amount
+	//plik przyjmuje jsona w formie tablicy z kluczami: action, postId, from, amount, userId, email, password, firstname, surname, position
 	//możliwe wartości klucza action - dzialania:
 	//printOffers - wyswietlanie postow
 	//from - od ktorego ID wyswietlac posty
@@ -10,6 +10,10 @@
     //listingReportedOffers - wyświetlanie zgłoszonych ofert
     //deletedReportedOffer - usunięto zgłoszoną ofertę  
     //bannedUser - zbanowano użytkownika  
+    //notAuthorized - wyświetlanie adminów
+    //notLoggedAdmin - niezalogowany admin
+    //notAuthorized - pozycja konta niewystarczająca do wykonania akcji
+    //deletedAdminAccount - usunięto konto admina
 
 	session_start();
 
@@ -174,13 +178,9 @@
 
         if ($jsonDecoded -> action == 'printAdmins') //////////////Wyświetlanie kont 
         {
-            $x -> $pdo -> prepare('SELECT position FROM admins WHERE userId = :id');
-            $x -> bindValue(":id", $_SESSION['idAdmin']);
-            $x -> execute();
+            $position = validatePosition ();
 
-            $position = $x -> fetch()[0] == 0;
-
-            if ($position = 2)                             ////////////postion = 1 - admin, position = 0 - moderator
+            if ($position = 1)                             ////////////postion = 1 - admin, position = 0 - moderator
             {
                 $x -> $pdo -> prepare('SELECT * FROM admins');
                 $x -> execute();
@@ -194,8 +194,71 @@
             }
             else $response = "notAuthorized";
         }
+
+        if ($jsonDecoded -> action == 'deleteAdmin') /////////Usuwanie konta admina
+        {
+            $position = validatePosition ();
+            if ($position = 1)                             
+            {
+                $x -> $pdo -> prepare('DELETE FROM admins WHERE userId = :id');
+                $x -> bindValue(":id", $jsonDecoded -> userId);
+                $x -> execute();
+
+                $response = "deletedAdminAccount";
+            }
+            else $response = "notAuthorized";
+        }
+
+        if ($jsonDecoded -> action == 'addAdmin') /////////Dodawanie konta admina
+        {
+            $position = validatePosition ();
+            if ($position = 1)                             
+            {
+                if (! (strlen($jsonDecoded -> password) >= 8 && filter_var($jsonDecoded -> email, FILTER_VALIDATE_EMAIL) ))
+                {
+                    $response = "badData";
+                    //$registration = true;
+                }
+                else
+                {
+                    $s = $pdo -> prepare ('SELECT COUNT(mail) FROM admins WHERE mail = :mail');
+                    $s -> bindValue (':mail', $jsonDecoded -> email);
+                    $s -> execute();
+
+                    if ($s -> fetch()[0] == 0)
+                    {
+                        $password =  password_hash($jsonDecoded -> password, PASSWORD_DEFAULT);
+                        $x -> $pdo -> prepare('INSERT INTO admins (mail, password, firstname, surname, position)');
+                        $x -> bindValue("mail", $jsonDecoded -> mail);
+                        $x -> bindValue("mail", $password);
+                        $x -> bindValue("mail", $jsonDecoded -> firstname);
+                        $x -> bindValue("mail", $jsonDecoded -> surname);
+                        $x -> bindValue("mail", $jsonDecoded -> position);
+                        $x -> execute();
+
+                        $response = "addedAdminAccount";
+                    }
+                    else
+                    {
+                        $response = "userAlreadyExists";
+                        //$registration = true;
+                    }
+                }
+            }
+            else $response = "notAuthorized";
+        }
     }   
     else $response = "notLoggedAdmin";   
 
 	echo json_encode(array('response' => $response, 'reportedOffers' => $reportedOffers, 'reportedMessages' => $reportedMessages, 'admins' => $adminsArray));
+
+    function validatePosition()
+    {
+        $x -> $pdo -> prepare('SELECT position FROM admins WHERE userId = :id');
+        $x -> bindValue(":id", $_SESSION['idAdmin']);
+        $x -> execute();
+
+        $position = $x -> fetch()[0] == 0;
+        return $position;
+    }
 ?>
