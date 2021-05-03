@@ -97,8 +97,6 @@
 				{
 					$response = "veryBadThingHappened";//nieoczekiwany błąd
 				}
-				
-
 			}
 		}
 		else if ($jsonDecoded -> action == "savePostEdited")  ////////zapisanie edytowanego postu
@@ -162,7 +160,6 @@
 		$s -> bindValue(":offerId", $offerId);
 		$s -> execute();
 		
-
 		$s = $pdo -> prepare('INSERT INTO datavalues (nameId, offerId, value)');
 		foreach ($parametersArray as $key => $value)
 		{
