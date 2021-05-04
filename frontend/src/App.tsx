@@ -8,20 +8,23 @@ import ProtectedRoute from "./shared/ProtectedRoute";
 import { AnimatePresence } from "framer-motion";
 import Offer from "./pages/Offer/Offer";
 import Logout from "./components/Logout/Logout";
-import {initialState, reducer} from "./shared/Reducers/AuthReducer";
+import { initialState, reducer } from "./shared/Reducers/AuthReducer";
 import AddOffer from "./pages/Offer/Add/AddOffer";
 
 type ContextType = {
-  state: any,
-  dispatch: React.Dispatch<any>
-}
+  state: any;
+  dispatch: React.Dispatch<any>;
+};
 
-export const AuthContext = React.createContext<ContextType>({state: "", dispatch: () => null});
+export const AuthContext = React.createContext<ContextType>({
+  state: "",
+  dispatch: () => null,
+});
 
 function App() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
-    <AuthContext.Provider value={{state,dispatch}}>
+    <AuthContext.Provider value={{ state, dispatch }}>
       <Router>
         <AnimatePresence>
           <Switch>
@@ -31,15 +34,15 @@ function App() {
               component={User}
             />
             <ProtectedRoute
-                session={state.isAuthenticated}
-                path="/dodaj-ogloszenie"
-                component={AddOffer}
+              session={state.isAuthenticated}
+              path="/dodaj-ogloszenie"
+              component={AddOffer}
             />
             <Route exact path="/" component={Homepage} />
             <Route path="/rejestracja" component={Register} />
             <Route path="/logowanie" component={Login} />
-            <Route path="/ogloszenie" component={Offer}/>
-            <Route path="/wyloguj" component={Logout}/>
+            <Route path="/ogloszenie:id" component={Offer} />
+            <Route path="/wyloguj" component={Logout} />
           </Switch>
         </AnimatePresence>
       </Router>

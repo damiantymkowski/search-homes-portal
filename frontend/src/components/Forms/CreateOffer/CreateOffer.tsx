@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import * as Styled from "./style.styles";
 import AddImage from "./AddImage/AddImage";
-import useChangeEmail from "../../../hooks/useChangeEmail";
 import useCreateOffer from "../../../hooks/useCreateOffer";
+import axios from "axios";
+import AsyncSelect from "react-select";
 
 const CreateOffer = (props: any) => {
-  const { handleInputChange, handleSubmit } = useCreateOffer({
+  const { handleInputChange, handleSubmit, setItems } = useCreateOffer({
     title: "",
     category: "",
     description: "",
-    rooms: "",
+    rooms_number: "",
     type_build: "",
     area: "",
     rent: "",
@@ -18,6 +19,12 @@ const CreateOffer = (props: any) => {
     phone_number: "",
     photos: [],
   });
+  const custom = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (custom.current) console.log(custom.current.id);
+  }, []);
+
   return (
     <>
       <Styled.Title>Dodaj ogłoszenie</Styled.Title>
@@ -70,7 +77,12 @@ const CreateOffer = (props: any) => {
             Pierwsze zdjęcie będzie zdjęciem głównym. Przeciągaj zdjęcia na inne
             miejsca, aby zmienić ich kolejność.
           </Styled.SmallText>
-          <AddImage handler={handleInputChange} />
+
+          <AddImage
+            ref={custom}
+            setItems={setItems}
+            handler={handleInputChange}
+          />
         </Styled.Box>
 
         <Styled.Box>
@@ -79,10 +91,15 @@ const CreateOffer = (props: any) => {
             Wpisz te informacje, które byłyby ważne dla Ciebie podczas
             przeglądania takiego ogłoszenia
           </Styled.SmallText>
-          <Styled.DescriptionInput data-tip data-for="descriptionTitle" />
+          <Styled.DescriptionInput
+            onChange={handleInputChange}
+            name="description"
+            data-tip
+            data-for="description"
+          />
           <Styled.StyledTooltip
             multiline={true}
-            id="descriptionTitle"
+            id="description"
             place="right"
             effect="solid"
             type="info"
@@ -148,6 +165,7 @@ const CreateOffer = (props: any) => {
               placeholder="Wybierz z listy"
             />
           </Styled.InputWrapper>
+
           <Styled.Label htmlFor="phone_number">Numer telefonu</Styled.Label>
           <Styled.InputWrapper>
             <Styled.Input

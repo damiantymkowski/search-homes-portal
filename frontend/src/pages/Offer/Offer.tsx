@@ -1,20 +1,25 @@
 import React from "react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import * as Global from "../../shared/Global/style.styles"
+import * as Global from "../../shared/Global/style.styles";
 import Advertisement from "../../components/Advertisement/Advertisement";
+import { useParams } from "react-router";
+
+interface ParamTypes {
+  id: string;
+}
 
 const Offer = () => {
-    return (
-        <>
-            <Header />
-            <Global.Container>
-                <Advertisement/>
-
-            </Global.Container>
-            <Footer />
-        </>
-    );
+  const { id } = useParams<ParamTypes>();
+  return (
+    <>
+      <Header />
+      <Global.Container>
+        <Advertisement />
+      </Global.Container>
+      <Footer />
+    </>
+  );
 };
 
 export default Offer;
