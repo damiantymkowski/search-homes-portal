@@ -5,5 +5,5 @@
 	$s = $pdo -> prepare('UPDATE users SET verified=0 WHERE verified=:fromLink');
 	$s -> bindValue(':fromLink', $_GET['ver']);
 	$s -> execute();
-	//przekierowanie na strone glowna
+	header("Location: http://localhost:3001");
 ?>

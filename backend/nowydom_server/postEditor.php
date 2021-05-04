@@ -27,6 +27,8 @@
 	$postInfo = "";
 	$dataInfo = "";
 	$photosUrl = "";
+	if(isset($jsonDecoded->params))
+	$jsonDecoded->params = (array)$jsonDecoded->params;
 
 	if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) /////////////////////DODAWANIE I EDYCJA OGLOSZENIA
 	{
@@ -71,12 +73,13 @@
 			{
 				//parametry są poprawne
 
-				$s = $pdo -> prepare('INSERT INTO offers (title, date, description, miniature, authorId) VALUES (:title, :date, :description, :miniature, :authorId)');
-				$s -> bindValues(":title", $jsonDecoded -> title);
-				$s -> bindValues(":date", time());
-				$s -> bindValues(":description", $jsonDecoded -> description);
-				$s -> bindValues(":miniature", $jsonDecoded -> photos[0]);
-				$s -> bindValues(":authorId", $_SESSION['id']);
+				$s = $pdo -> prepare('INSERT INTO offers (title, date, description, miniature, authorId, price) VALUES (:title, :date, :description, :miniature, :authorId, :price)');
+				$s -> bindValue(":title", $jsonDecoded -> title);
+				$s -> bindValue(":date", time());
+				$s -> bindValue(":description", $jsonDecoded -> description);
+				$s -> bindValue(":miniature", $jsonDecoded -> photos[0]);
+				$s -> bindValue(":authorId", $_SESSION['id']);
+				$s -> bindValue(":price", $jsonDecoded->price);
 				$s -> execute();
 
 				$lastId = $pdo -> lastInsertId();
@@ -84,10 +87,12 @@
 				$s = $pdo -> prepare('INSERT INTO photos (offerId, url) VALUES (:offerId, :url)');
 				foreach($jsonDecoded->photos as $photo)
 				{
-					$s -> bindValues(":offerId", $pdo -> lastInsertId());
-					$s -> bindValues(":url", $photo);
+					$s -> bindValue(":offerId", $pdo -> lastInsertId());
+					$s -> bindValue(":url", $photo);
 					$s -> execute();
 				}
+
+
 
 				if (insertParameters ($lastId, $jsonDecoded -> params) == 0)
 				{
@@ -95,6 +100,7 @@
 				}
 				else
 				{
+
 					$response = "veryBadThingHappened";//nieoczekiwany błąd
 				}
 
@@ -158,20 +164,25 @@
 		//tablica "parametersArray": klucz jest identyfikatorem parametru w bazie, a wartość to wartość parametru
 		//usuwamy obecne dla danej oferty parametry i wpisujemy nowe
 
+        global $pdo;
 		$s = $pdo -> prepare ('DELETE FROM datavalues WHERE offerID = :offerId');
 		$s -> bindValue(":offerId", $offerId);
 		$s -> execute();
 
+        $i = 0;
 
-		$s = $pdo -> prepare('INSERT INTO datavalues (nameId, offerId, value)');
+		$s = $pdo -> prepare('INSERT INTO datavalues (nameId, offerId, value) VALUES (:nameId, :offerId, :value)');
 		foreach ($parametersArray as $key => $value)
 		{
 			$s -> bindValue(":nameId", $key);
 			$s -> bindValue(":offerId", $offerId);
 			$s -> bindValue(":value", $value);
 			$s -> execute();
+			$i+=$s->rowCount();
 		}
-		if ($s -> rowCount() == count($parametersArray))
+
+
+		if ($i == count($parametersArray))
 			return 0;
 		else
 			return 1;
@@ -186,12 +197,12 @@
 		$s = $pdo -> prepare('SELECT id FROM datanames WHERE required=1');
 		$s->execute();
 
-
-
 		while ($ids = $s -> fetch())
 		{
 			//jeżeli brak któregoś z wymaganych parametrów
-			if (!isset ($parametersArray[$ids]))
+
+
+			if (!isset ($parametersArray[$ids[0]]))
 				return 1;
 		}
 
@@ -201,13 +212,14 @@
 
 		while ($ids = $s -> fetch())
 		{
-			if (isset ($parametersArray[$ids[0]]))
+			if (isset ($temp[$ids[0]]))
 			{
 				if (!strlen(trim($parametersArray[$ids[0]])) > 0)	//pusty ciąg znakowy
 					return 2;
 
-					if ($ids[1] != 'NULL')      //jeżeli nie jest predefiniowany (NULL)
+					if ($ids[1] != NULL)      //jeżeli nie jest predefiniowany (NULL)
 					{
+					print_r($parametersArray);
 						if (!preg_match($ids[1], $parametersArray[$ids[0]]))    //jeżeli nie pasuje do wzorca
 						{
 							return 2;
