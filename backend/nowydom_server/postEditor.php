@@ -10,9 +10,9 @@
 	//editPreview - zwrócono informacje do wyświetlenia przy edycji
 	//postAdded - dodano nowy post
 	//postEdited - zedytowano post
-	//zdjecia beda przechowywane w tablicy (adresy url w tablicy tekstow)
+	//zdjecia beda przechowywane w tablicy (adresy url w tablicy tekstow) 
 	//miniaturka jest pierwszym elementem tablicy
-
+	
 	session_start();
 
 	$json = file_get_contents('php://input');
@@ -42,8 +42,8 @@
 			$s -> $pdo -> prepare('SELECT * FROM offers WHERE id = :id');
 			$s -> bindValue(':id', $jsonDecoded -> postId);
 			$s -> execute();
-			$postInfo = $s -> fetch(PDO::FETCH_ASSOC);
-
+			$postInfo = $s -> fetch(PDO::FETCH_ASSOC);	
+			
 			$s -> $pdo -> prepare('SELECT nameId, value FROM datavalues WHERE offerId = :offerId');       //////Damian wypowiedz sie, nazwa czy id
 			$s -> bindValue(':offerId', $jsonDecoded -> postId);
 			$s -> execute();
@@ -53,14 +53,14 @@
 			$s -> bindValue(':id',  $jsonDecoded -> postId);
 			$s -> execute();
 			$photosUrl = $s -> fetch(PDO::FETCH_ASSOC);
-
+			
 			$parameters = getParameters();
 			$response = "editPreview";
 		}
 		else if ($jsonDecoded -> action == "savePostNew") ////////zapisanie nowego postu
 		{
 			$vp = validateParameters($jsonDecoded -> params);
-
+			
 			if ($vp == 1)
 			{
 				$response = "lackRequired"; //brak któregoś z wymaganych parametrów
@@ -86,9 +86,15 @@
 
 				$s = $pdo -> prepare('INSERT INTO photos (offerId, url) VALUES (:offerId, :url)');
 				foreach($jsonDecoded->photos as $photo)
+<<<<<<< HEAD
 				{
 					$s -> bindValue(":offerId", $pdo -> lastInsertId());
 					$s -> bindValue(":url", $photo);
+=======
+				{	
+					$s -> bindValues(":offerId", $pdo -> lastInsertId());
+					$s -> bindValues(":url", $photo);
+>>>>>>> main
 					$s -> execute();
 				}
 
@@ -103,14 +109,14 @@
 
 					$response = "veryBadThingHappened";//nieoczekiwany błąd
 				}
-
+				
 
 			}
 		}
 		else if ($jsonDecoded -> action == "savePostEdited")  ////////zapisanie edytowanego postu
 		{
 			$vp = validateParameters($jsonDecoded -> params);
-
+			
 			if ($vp == 1)
 			{
 				$response = "lackRequired"; //brak któregoś z wymaganych parametrów
@@ -134,7 +140,7 @@
 
 				$s = $pdo -> prepare('INSERT INTO photos (offerId, url) VALUES (:offerId, :url)');         //dodajemy na nowo
 				foreach($jsonDecoded->photos as $photo)
-				{
+				{	
 					$s -> bindValues(":offerId", $jsonDecoded -> postId);
 					$s -> bindValues(":url", $photo);
 					$s -> execute();
@@ -155,9 +161,9 @@
 	{
 		$response = "notLogged";
 	}
-
+	
 	echo json_encode(array('response' => $response, 'parameters' => $parameters, 'postInfo' => $postInfo, 'dataInfo' => $dataInfo, 'photosUrl' => $photosUrl));
-
+	
 	function insertParameters ($offerId, $parametersArray)
 	{
 		//offerId - id oferty
@@ -168,8 +174,12 @@
 		$s = $pdo -> prepare ('DELETE FROM datavalues WHERE offerID = :offerId');
 		$s -> bindValue(":offerId", $offerId);
 		$s -> execute();
+<<<<<<< HEAD
 
         $i = 0;
+=======
+		
+>>>>>>> main
 
 		$s = $pdo -> prepare('INSERT INTO datavalues (nameId, offerId, value) VALUES (:nameId, :offerId, :value)');
 		foreach ($parametersArray as $key => $value)
@@ -191,12 +201,17 @@
 	{
 		global $pdo;
 		//parametry: tablica "parametersArray": klucz jest identyfikatorem parametru w bazie, a wartość to wartość parametru
-
+			
 		//sprawdzanie poprawności wpisanych parametrów
 		//	sprawdzanie, czy wszystkie wymagane parametry są obecne
+<<<<<<< HEAD
 		$s = $pdo -> prepare('SELECT id FROM datanames WHERE required=1');
 		$s->execute();
 
+=======
+		$s = $pdo -> prepare('SELECT id FROM datanames WHERE required = 1') -> execute();
+		
+>>>>>>> main
 		while ($ids = $s -> fetch())
 		{
 			//jeżeli brak któregoś z wymaganych parametrów
@@ -205,22 +220,28 @@
 			if (!isset ($parametersArray[$ids[0]]))
 				return 1;
 		}
-
+		
 		//	sprawdzenie, czy parametry są odpowiedniego typu (czy są liczbowe, czy są uzupełnione)
-		$s = $pdo -> prepare('SELECT id, regex FROM datanames');
-		$s->execute();
-
+		$s = $pdo -> prepare('SELECT id, regex FROM datanames') -> execute();
+		
 		while ($ids = $s -> fetch())
 		{
 			if (isset ($temp[$ids[0]]))
 			{
 				if (!strlen(trim($parametersArray[$ids[0]])) > 0)	//pusty ciąg znakowy
 					return 2;
+<<<<<<< HEAD
 
 					if ($ids[1] != NULL)      //jeżeli nie jest predefiniowany (NULL)
 					{
 					print_r($parametersArray);
 						if (!preg_match($ids[1], $parametersArray[$ids[0]]))    //jeżeli nie pasuje do wzorca
+=======
+					
+					if ($ids[1] != 'NULL')      //jeżeli nie jest predefiniowany (NULL)
+					{
+						if (!preg_match($ids[1], $parametersArray[$ids[0]]))    //jeżeli nie pasuje do wzorca    
+>>>>>>> main
 						{
 							return 2;
 						}

@@ -5,8 +5,8 @@ function polacz_baza()
 	
 	try
 	{
-		$pdo = new PDO('mysql:host=46.101.189.122;dbname=nowydom;charset=utf8mb4', 'devteam', 'devX2Team1@');
-
+		$pdo = new PDO('mysql:host=damiantymkowski.me;dbname=nowydom;charset=utf8mb4', 'devteam', 'devX2Team1@');
+		
 	}
 	catch(PDOException $e)
 	{

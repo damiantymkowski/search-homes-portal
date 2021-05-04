@@ -58,7 +58,7 @@
 			$x -> bindValue(':authorId', $_SESSION['id']);
 			$x -> execute();
 			$count = $y -> rowCount();
-			if ($count == 1) $response = "deleted";;
+			if ($count == 1) $response = "deleted";
 			else $response = "veryBadThingHappened";
 			
 			$idAffected = $jsonDecoded -> idToAffect;
@@ -71,7 +71,7 @@
 			$x -> bindValue(':date', time()); 
 			$x -> execute();
 			$count = $y -> rowCount();
-			if ($count == 1) $response = "renewed";;
+			if ($count == 1) $response = "renewed";
 			else $response = "veryBadThingHappened";
 		}
 	}

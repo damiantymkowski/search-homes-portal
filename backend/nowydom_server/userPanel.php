@@ -72,7 +72,7 @@
 			}
 			else $response = "wrongPassword";
 		}
-		else if ($jsonDecoded -> action == 'changeContactData') //////////////////////ZMIANA DANYCH UŻITKOWNIKA
+		else if ($jsonDecoded -> action == 'changeContactData') //////////////////////ZMIANA DANYCH UŻYTKOWNIKA
 		{
 			$patternPhone = "/^\d{9}$/";
 			$patternName = "/[A-Za-z0-9]{3,30}/";
