@@ -109,8 +109,6 @@
 
 					$response = "veryBadThingHappened";//nieoczekiwany błąd
 				}
-				
-
 			}
 		}
 		else if ($jsonDecoded -> action == "savePostEdited")  ////////zapisanie edytowanego postu
@@ -179,9 +177,13 @@
         $i = 0;
 =======
 		
+<<<<<<< HEAD
 >>>>>>> main
 
 		$s = $pdo -> prepare('INSERT INTO datavalues (nameId, offerId, value) VALUES (:nameId, :offerId, :value)');
+=======
+		$s = $pdo -> prepare('INSERT INTO datavalues (nameId, offerId, value)');
+>>>>>>> dade5d4447dd059116fdb7ee21fa3751b1ab4e55
 		foreach ($parametersArray as $key => $value)
 		{
 			$s -> bindValue(":nameId", $key);
