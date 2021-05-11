@@ -3,22 +3,35 @@ import * as Styled from "./style.styles";
 import AddImage from "./AddImage/AddImage";
 import useCreateOffer from "../../../hooks/useCreateOffer";
 import axios from "axios";
-import AsyncSelect from "react-select";
+import { Spinner } from "react-bootstrap";
 
-const CreateOffer = (props: any) => {
-  const { handleInputChange, handleSubmit, setItems } = useCreateOffer({
-    title: "",
-    category: "",
-    description: "",
-    rooms_number: "",
-    type_build: "",
-    area: "",
-    rent: "",
-    price: "",
-    localization: "",
-    phone_number: "",
-    photos: [],
-  });
+interface IProps {
+  action: string;
+  postId?: string;
+}
+const HandleOffer = (props: IProps) => {
+  const {
+    handleInputChange,
+    handleSubmit,
+    setItems,
+    loginInfo,
+    loading,
+  } = useCreateOffer(
+    {
+      title: "",
+      category: "",
+      description: "",
+      rooms_number: "",
+      type_build: "",
+      area: "",
+      rent: "",
+      price: "",
+      localization: "",
+      phone_number: "",
+      photos: [],
+    },
+    { action: props.action }
+  );
   const custom = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -177,8 +190,9 @@ const CreateOffer = (props: any) => {
         </Styled.Box>
         <Styled.SaveButton>Zapisz ogłoszenie</Styled.SaveButton>
       </Styled.Form>
+      {loading ? <Spinner animation="border" role="status" /> : loginInfo}
     </>
   );
 };
 
-export default CreateOffer;
+export default HandleOffer;

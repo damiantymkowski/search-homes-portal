@@ -1,13 +1,24 @@
 import React from "react";
 import * as Styled from "./style.styles";
 
-const OfferBlock = () => {
+import { NavLink } from "react-router-dom";
+
+interface IOffer {
+  id: number;
+  title: string;
+  miniature: string;
+  price: number;
+}
+
+const OfferBlock = (props: IOffer) => {
   return (
     <>
-      <Styled.Box>
-        <Styled.Price>23,99zł</Styled.Price>
-        <Styled.Title>Warszawa, Mokotów</Styled.Title>
-      </Styled.Box>
+      <NavLink to={"/ogloszenie" + props.id}>
+        <Styled.Box background={props.miniature}>
+          <Styled.Price>{props.price}</Styled.Price>
+          <Styled.Title>{props.title}</Styled.Title>
+        </Styled.Box>
+      </NavLink>
     </>
   );
 };

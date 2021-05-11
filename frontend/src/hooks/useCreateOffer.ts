@@ -15,24 +15,25 @@ interface initialValues {
   photos: [];
 }
 
-const useCreateOffer = (initialValues: initialValues) => {
+interface IProps {
+  action: string;
+  postId?: string;
+}
+
+const useCreateOffer = (initialValues: initialValues, props: IProps) => {
   const [inputs, setInputs] = useState(initialValues);
   const [currentElement, setCurrentElement] = useState("");
   const [loginInfo, setLoginInfo] = useState("");
   const [items, setItems] = useState([]);
+  const [loading, setLoading]: [
+    boolean,
+    (loading: boolean) => void
+  ] = useState<boolean>(false);
   const [photos, setPhotos] = useState([{}] as any);
-
-  function search(nameKey: any, myArray: any) {
-    for (var i = 0; i < myArray.length; i++) {
-      if (myArray[i].name === nameKey) {
-        return myArray[i];
-      }
-    }
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setLoading(true);
     let miniature;
 
     if (items.length > 0) {
@@ -100,11 +101,13 @@ const useCreateOffer = (initialValues: initialValues) => {
         description: inputs.description,
         photos: arr,
         price: inputs.price,
-        action: "savePostNew",
+        postId: props.postId,
+        action: props.action,
       },
       withCredentials: true,
     }).then((response) => {
-      console.log(response);
+      setLoginInfo("Dodano ogłoszenie");
+      setLoading(false);
     });
   };
 
@@ -124,6 +127,6 @@ const useCreateOffer = (initialValues: initialValues) => {
     }
   };
 
-  return { handleSubmit, handleInputChange, loginInfo, setItems };
+  return { handleSubmit, handleInputChange, loginInfo, setItems, loading };
 };
 export default useCreateOffer;

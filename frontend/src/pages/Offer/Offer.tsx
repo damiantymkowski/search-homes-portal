@@ -15,7 +15,7 @@ const Offer = () => {
     <>
       <Header />
       <Global.Container>
-        <Advertisement />
+        <Advertisement offer_id={id} />
       </Global.Container>
       <Footer />
     </>

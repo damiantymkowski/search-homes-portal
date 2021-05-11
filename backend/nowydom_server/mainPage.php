@@ -28,20 +28,14 @@
 			$jsonDecoded -> amount = 100;
 		}
 		
-		$x = $pdo -> prepare('SELECT * FROM offers WHERE date >= :timeCheck ORDER BY date DESC LIMIT :a,:b'); //posty według daty
-		$x -> bindValue(':id', $_SESSION['id']);
-		$x -> bindValue(':timeCheck', time() - 2592000);
-		$x -> bindValue(':a', $jsonDecoded -> from);
-		$x -> bindValue(':b', $jsonDecoded -> amount);
+		$x = $pdo -> prepare('SELECT id, title, miniature FROM offers WHERE date >= :timeCheck ORDER BY date DESC LIMIT :a,:b'); //posty według daty
+		$x -> bindValue(':timeCheck', time()-2592000, PDO::PARAM_INT);
+		$x -> bindValue(':a', $jsonDecoded -> from, PDO::PARAM_INT);
+		$x -> bindValue(':b', $jsonDecoded -> amount, PDO::PARAM_INT);
 		$x -> execute();
-		
-		while($offers = $x -> fetch(PDO::FETCH_ASSOC))
-		{
-			if ($offers['date'] >= time() - 2592000)
-			{
-				$actualOffers[] = $offers;
-			}
-		}
+
+		$actualOffers = $x->fetchAll(PDO::FETCH_ASSOC);
+
 			
 		$response = "listingOffers";
 	}

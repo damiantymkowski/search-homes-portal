@@ -10,6 +10,7 @@ import Offer from "./pages/Offer/Offer";
 import Logout from "./components/Logout/Logout";
 import { initialState, reducer } from "./shared/Reducers/AuthReducer";
 import AddOffer from "./pages/Offer/Add/AddOffer";
+import UpdateOffer from "./pages/Offer/Update/UpdateOffer";
 
 type ContextType = {
   state: any;
@@ -32,6 +33,11 @@ function App() {
               session={state.isAuthenticated}
               path="/mojekonto"
               component={User}
+            />
+            <ProtectedRoute
+              session={state.isAuthenticated}
+              path="/edytuj-ogloszenie:id"
+              component={UpdateOffer}
             />
             <ProtectedRoute
               session={state.isAuthenticated}

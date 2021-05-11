@@ -103,7 +103,6 @@ export const StyledTooltip = styled(ReactTooltip)`
 export const SmallText = styled.p`
   font-size: 12px;
   color: gray;
-  margin-top: -25px;
 `;
 
 export const DescriptionInput = styled.input`

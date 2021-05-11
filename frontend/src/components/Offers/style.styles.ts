@@ -9,4 +9,6 @@ export const Title = styled.h3`
 export const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 `;
