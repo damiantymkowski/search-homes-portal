@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { Colors } from "../../shared/Colors/style.styles";
 
 export const Box = styled.div`
-  margin-top: 250px;
   background: ${Colors.deepWhite};
   width: calc(100% - 20px);
   min-height: 450px;

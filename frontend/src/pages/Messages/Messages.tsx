@@ -35,7 +35,10 @@ const Messages = () => {
     IMessages[],
     (messages: IMessages[]) => void
   ] = useState(defaultMessages);
-
+  const [messagesToOffers, setMessagesToOffers]: [
+    IMessages[],
+    (messages: IMessages[]) => void
+  ] = useState(defaultMessages);
   let message = {};
 
   useEffect(() => {
@@ -48,6 +51,22 @@ const Messages = () => {
       withCredentials: true,
     }).then((response) => {
       let temp = [];
+      let temp_anotherOffer = [];
+      for (let i = 0; i < response.data.convsOrMsgs.toNotMyOffers.length; i++) {
+        temp_anotherOffer.push({
+          lastMsgContent:
+            response.data.convsOrMsgs.toNotMyOffers[i]["lastMsgContent"],
+          lastMsgDate: new Date(
+            response.data.convsOrMsgs.toNotMyOffers[i]["lastMsgDate"] * 1000
+          ).toLocaleString("pl-PL"),
+          offerTitle: response.data.convsOrMsgs.toNotMyOffers[i]["offerTitle"],
+          person: response.data.convsOrMsgs.toNotMyOffers[i]["person"],
+          unread: response.data.convsOrMsgs.toNotMyOffers[i]["unread"],
+          convId: response.data.convsOrMsgs.toNotMyOffers[i]["id"],
+        });
+      }
+      setMessagesToOffers(temp_anotherOffer);
+
       for (let i = 0; i < response.data.convsOrMsgs.toMyOffers.length; i++) {
         temp.push({
           lastMsgContent:
@@ -61,7 +80,7 @@ const Messages = () => {
           convId: response.data.convsOrMsgs.toMyOffers[i]["id"],
         });
       }
-      console.log(response);
+
       setMessages(temp);
     });
   }, []);
@@ -94,7 +113,32 @@ const Messages = () => {
                         <th>Czytaj</th>
                       </tr>
                     </thead>
+
                     <tbody>
+                      {messagesToOffers.map((message: IMessages) => {
+                        return (
+                          <tr>
+                            <td>{message.person}</td>
+                            <td colSpan={2}>{message.lastMsgContent}</td>
+                            <td>{message.offerTitle}</td>
+                            <td>{message.lastMsgDate}</td>
+                            <td>
+                              {parseInt(message.unread) > 0 ? (
+                                <Alert variant="danger">
+                                  Masz nieprzeczytaną wiadomość
+                                </Alert>
+                              ) : (
+                                ""
+                              )}
+                            </td>
+                            <td>
+                              <NavLink to={"/konwersacja" + message.convId}>
+                                Czytaj
+                              </NavLink>
+                            </td>
+                          </tr>
+                        );
+                      })}
                       <tr>
                         <td>{message.person}</td>
                         <td colSpan={2}>{message.lastMsgContent}</td>
