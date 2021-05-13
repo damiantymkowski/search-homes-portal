@@ -30,7 +30,7 @@ const HandleOffer = (props: IProps) => {
       phone_number: "",
       photos: [],
     },
-    { action: props.action }
+    { action: props.action, postId: props.postId }
   );
   const custom = useRef<HTMLInputElement>(null);
 

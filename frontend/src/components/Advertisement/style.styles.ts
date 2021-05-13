@@ -12,9 +12,18 @@ export const Localization = styled.h4`
   margin-top: -15px;
 `;
 
+export const FormContainer = styled.div`
+  margin-top: 60px;
+  flex-basis: 60%;
+`;
+export const OfferContainer = styled.div`
+  flex-basis: 70%;
+`;
+
 export const Container = styled.div`
   width: 85%;
   font-family: "Lato", sans-serif;
+  display: flex;
 `;
 
 export const MainImage = styled.img`

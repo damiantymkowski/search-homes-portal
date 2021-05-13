@@ -83,6 +83,9 @@ const Header = () => {
                   <Styled.NavLink>Moje konto</Styled.NavLink>
                 </LinkContainer>
               </Nav.Link>
+              <Nav.Link eventKey={2}>
+                <Logout />
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

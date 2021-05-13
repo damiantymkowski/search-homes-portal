@@ -11,6 +11,8 @@ import Logout from "./components/Logout/Logout";
 import { initialState, reducer } from "./shared/Reducers/AuthReducer";
 import AddOffer from "./pages/Offer/Add/AddOffer";
 import UpdateOffer from "./pages/Offer/Update/UpdateOffer";
+import Messages from "./pages/Messages/Messages";
+import Conversation from "./pages/Conversation/Conversation";
 
 type ContextType = {
   state: any;
@@ -43,6 +45,16 @@ function App() {
               session={state.isAuthenticated}
               path="/dodaj-ogloszenie"
               component={AddOffer}
+            />
+            <ProtectedRoute
+              session={state.isAuthenticated}
+              path="/wiadomosci"
+              component={Messages}
+            />
+            <ProtectedRoute
+              session={state.isAuthenticated}
+              path="/konwersacja:id"
+              component={Conversation}
             />
             <Route exact path="/" component={Homepage} />
             <Route path="/rejestracja" component={Register} />
