@@ -32,6 +32,8 @@ const useLogin = (initialValues: initialValues) => {
     }).then((response) => {
       if (response.data.response == "noUser")
         setLoginInfo("Brak takiego Użytkownika!");
+      if (response.data.response == "wrongPassword")
+        setLoginInfo("Błędne hasło!");
       if (response.data.response === "successLogin") {
         dispatch({
           type:"LOGIN",

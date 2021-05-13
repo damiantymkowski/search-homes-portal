@@ -52,33 +52,38 @@ const Messages = () => {
     }).then((response) => {
       let temp = [];
       let temp_anotherOffer = [];
-      for (let i = 0; i < response.data.convsOrMsgs.toNotMyOffers.length; i++) {
-        temp_anotherOffer.push({
-          lastMsgContent:
-            response.data.convsOrMsgs.toNotMyOffers[i]["lastMsgContent"],
-          lastMsgDate: new Date(
-            response.data.convsOrMsgs.toNotMyOffers[i]["lastMsgDate"] * 1000
-          ).toLocaleString("pl-PL"),
-          offerTitle: response.data.convsOrMsgs.toNotMyOffers[i]["offerTitle"],
-          person: response.data.convsOrMsgs.toNotMyOffers[i]["person"],
-          unread: response.data.convsOrMsgs.toNotMyOffers[i]["unread"],
-          convId: response.data.convsOrMsgs.toNotMyOffers[i]["id"],
-        });
+      if (response.data.convsOrMsgs.toNotMyOffers != null)
+      {
+        for (let i = 0; i < response.data.convsOrMsgs.toNotMyOffers.length; i++) {
+          temp_anotherOffer.push({
+            lastMsgContent:
+              response.data.convsOrMsgs.toNotMyOffers[i]["lastMsgContent"],
+            lastMsgDate: new Date(
+              response.data.convsOrMsgs.toNotMyOffers[i]["lastMsgDate"] * 1000
+            ).toLocaleString("pl-PL"),
+            offerTitle: response.data.convsOrMsgs.toNotMyOffers[i]["offerTitle"],
+            person: response.data.convsOrMsgs.toNotMyOffers[i]["person"],
+            unread: response.data.convsOrMsgs.toNotMyOffers[i]["unread"],
+            convId: response.data.convsOrMsgs.toNotMyOffers[i]["id"],
+          });
+        }
       }
       setMessagesToOffers(temp_anotherOffer);
-
-      for (let i = 0; i < response.data.convsOrMsgs.toMyOffers.length; i++) {
-        temp.push({
-          lastMsgContent:
-            response.data.convsOrMsgs.toMyOffers[i]["lastMsgContent"],
-          lastMsgDate: new Date(
-            response.data.convsOrMsgs.toMyOffers[i]["lastMsgDate"] * 1000
-          ).toLocaleString("pl-PL"),
-          offerTitle: response.data.convsOrMsgs.toMyOffers[i]["offerTitle"],
-          person: response.data.convsOrMsgs.toMyOffers[i]["person"],
-          unread: response.data.convsOrMsgs.toMyOffers[i]["unread"],
-          convId: response.data.convsOrMsgs.toMyOffers[i]["id"],
-        });
+      if (response.data.convsOrMsgs.toMyOffers != null)
+      {
+        for (let i = 0; i < response.data.convsOrMsgs.toMyOffers.length; i++) {
+          temp.push({
+            lastMsgContent:
+              response.data.convsOrMsgs.toMyOffers[i]["lastMsgContent"],
+            lastMsgDate: new Date(
+              response.data.convsOrMsgs.toMyOffers[i]["lastMsgDate"] * 1000
+            ).toLocaleString("pl-PL"),
+            offerTitle: response.data.convsOrMsgs.toMyOffers[i]["offerTitle"],
+            person: response.data.convsOrMsgs.toMyOffers[i]["person"],
+            unread: response.data.convsOrMsgs.toMyOffers[i]["unread"],
+            convId: response.data.convsOrMsgs.toMyOffers[i]["id"],
+          });
+        }
       }
 
       setMessages(temp);
