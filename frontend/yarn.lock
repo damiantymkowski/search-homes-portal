@@ -9881,6 +9881,11 @@
     "typescript" "^3.9.7"
     "use-debounce" "^3.4.3"
 
+"react-hook-form@^7.5.3":
+  "integrity" "sha512-5T0mfJ4kCPKljd7t3Rgp7lML4Y2+kaZIeMdN6Zo/J7gBQ+WkrDBHOftdOtz4X+7/eqHGak5yL5evNpYdA9abVA=="
+  "resolved" "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.5.3.tgz"
+  "version" "7.5.3"
+
 "react-image-gallery@^1.0.9":
   "integrity" "sha512-JXTlEBv2c/N5vGl0Pfu774JFOuMRnG9TMSwIURMSBDkl70blASJYGBuHCc//8jRZTojUvpBG5A/QT9Gs3Rv4Bw=="
   "resolved" "https://registry.npmjs.org/react-image-gallery/-/react-image-gallery-1.0.9.tgz"
