@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import * as Styled from "./style.styles";
 import axios from "axios";
 import ImageGallery from "react-image-gallery";
-import { Marker, Popup, MapContainer, TileLayer } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
 import Map from "../Map/Map";
 import { Spinner } from "react-bootstrap";
+import SendOfferMessageForm from "../Forms/SendOfferMessageForm/SendOfferMessageForm";
 
 interface infoType {
   Price: string;
@@ -80,36 +80,41 @@ const Advertisement = (props: { offer_id: string }) => {
     return (
       <>
         <Styled.Container>
-          <Styled.Title>{info.title}</Styled.Title>
-          <Styled.Localization>
-            Warszawa, Śródmieście ul. Ciasna
-          </Styled.Localization>
-
-          <Styled.Box>
-            <ImageGallery
-              infinite={true}
-              lazyLoad={true}
-              showNav={false}
-              items={photos}
-            />
-          </Styled.Box>
-          <Styled.Details>
+          <Styled.OfferContainer>
             <Styled.Title>{info.title}</Styled.Title>
-            <Styled.Price>Cena: {info.Price} zł</Styled.Price>
-            <Styled.DetatilsTitle>Szczegóły ogłoszenia</Styled.DetatilsTitle>
-            {additionalParams.map((field: any, i) => {
-              return (
-                <Styled.Field>
-                  <Styled.Name>{field.name}:</Styled.Name>
-                  <Styled.Value>{field.value}</Styled.Value>
-                </Styled.Field>
-              );
-            })}
-            <Styled.DetatilsTitle>Opis</Styled.DetatilsTitle>
-            <Styled.Description>{info.description}</Styled.Description>
-            <Styled.DetatilsTitle>Mapa</Styled.DetatilsTitle>
-          </Styled.Details>
-          <Map position={position} />
+            <Styled.Localization>
+              Warszawa, Śródmieście ul. Ciasna
+            </Styled.Localization>
+
+            <Styled.Box>
+              <ImageGallery
+                infinite={true}
+                lazyLoad={true}
+                showNav={false}
+                items={photos}
+              />
+            </Styled.Box>
+            <Styled.Details>
+              <Styled.Title>{info.title}</Styled.Title>
+              <Styled.Price>Cena: {info.Price} zł</Styled.Price>
+              <Styled.DetatilsTitle>Szczegóły ogłoszenia</Styled.DetatilsTitle>
+              {additionalParams.map((field: any, i) => {
+                return (
+                  <Styled.Field>
+                    <Styled.Name>{field.name}:</Styled.Name>
+                    <Styled.Value>{field.value}</Styled.Value>
+                  </Styled.Field>
+                );
+              })}
+              <Styled.DetatilsTitle>Opis</Styled.DetatilsTitle>
+              <Styled.Description>{info.description}</Styled.Description>
+              <Styled.DetatilsTitle>Mapa</Styled.DetatilsTitle>
+            </Styled.Details>
+            <Map position={position} />
+          </Styled.OfferContainer>
+          <Styled.FormContainer>
+            <SendOfferMessageForm offer_id={props.offer_id} />
+          </Styled.FormContainer>
         </Styled.Container>
       </>
     );

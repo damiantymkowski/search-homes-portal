@@ -136,7 +136,7 @@
 						{
 							$sc = $pdo -> prepare ('INSERT INTO messages (authorId, content, date, conversationId)
 													VALUES (:userId, :content, :date, :convId)');
-								
+
 							$sc -> bindValue (':userId', $_SESSION['id']);
 							$sc -> bindValue (':date', time());
 							$sc -> bindValue (':convId', $convId);
@@ -187,7 +187,7 @@
 						$s -> bindValue (':offerId', $jsonDecoded -> offerId);
 						$s -> bindValue (':userId', $_SESSION['id']);
 						$s -> execute();
-						
+
 						if ($convId = $s -> fetch ())
 						{
 							//rozmowa już istnieje
@@ -224,7 +224,7 @@
 						}
 						$sc = $pdo -> prepare ('INSERT INTO messages (authorId, content, date, conversationId)
 												VALUES (:userId, :content, :date, :convId)');
-							
+
 						$sc -> bindValue (':userId', $_SESSION['id']);
 						$sc -> bindValue (':date', time());
 						$sc -> bindValue (':convId', $convId);
