@@ -92,6 +92,17 @@ const useCreateOffer = (initialValues: initialValues, props: IProps) => {
       3: inputs.localization,
       4: inputs.rooms_number,
     };
+
+    console.log({
+      params: myArray,
+      title: inputs.title,
+      description: inputs.description,
+      photos: arr,
+      price: inputs.price,
+      postId: props.postId,
+      action: props.action,
+    });
+
     axios({
       method: "post",
       url: "postEditor.php",

@@ -60,22 +60,25 @@
 				break;
 			
 			case 'printMsgs':
-				if (isset ( $jsonDecoded['convId'] ) && isNumeric (  $jsonDecoded['convId'] ))
+				if (isset ( $jsonDecoded -> convId ) && is_numeric (  $jsonDecoded -> convId ))
 				{
 					$x = $pdo -> prepare('SELECT messages.id, users.name AS "author", users.id AS "authorId", messages.content, messages.date,
 												offers.id AS "offerId", offers.title AS "offerTitle", offers.miniature AS "offerMiniature"
 											FROM messages, users, offers, conversations
 											WHERE messages.conversationId = :convId
-												AND (conversations.personAId = :userId OR conversations.personBId = :userId)
-												AND users.id = messages.authorId AND offers.id = conversations.offerId AND conversations.id = :convId
+												AND (conversations.personAId = :userId 
+												OR conversations.personBId = :userId)
+												AND users.id = messages.authorId 
+												AND offers.id = conversations.offerId 
+												AND conversations.id = :convId
 											ORDER BY messages.date ASC');
 					
-					$x -> bindValue (':convId', $jsonDecoded['convId']);
+					$x -> bindValue (':convId', $jsonDecoded -> convId);
 					$x -> bindValue (':userId', $_SESSION['id']);
 
 					if ($x -> execute ())
 					{
-						$convsMsgs = $x -> fetchAll ();
+						$convsMsgs = $x -> fetchAll (PDO::FETCH_ASSOC);
 						
 						if (isset ($convsMsgs[0]))
 						{
@@ -93,7 +96,7 @@
 														SET unreadA = 0
 														WHERE conversations.id = :convId');
 							}
-							$x -> bindValue (':convId', $jsonDecoded['convId']);
+							$x -> bindValue (':convId', $jsonDecoded -> convId);
 							$x -> execute ();
 						}
 						else
@@ -113,20 +116,20 @@
 				break;
 
 			case 'sendMsgToConv':
-				if (isset ($jsonDecoded['convId']) && isNumeric($jsonDecoded['convId']))
+				if (isset ($jsonDecoded -> convId) && is_numeric($jsonDecoded -> convId))
 				{
-					$convId = $jsonDecoded['convId'];
+					$convId = $jsonDecoded -> convId;
 
-					$jsonDecoded['msgContent'] = trim ( $jsonDecoded['msgContent'] );
-					if (strlen ( $jsonDecoded['msgContent'] ) > 0)
+					$jsonDecoded -> msgContent = trim ( $jsonDecoded -> msgContent );
+					if (strlen ( $jsonDecoded -> msgContent ) > 0)
 					{
 						$s = $pdo -> prepare ('SELECT personAId, personBId
 												FROM conversations
-												WHERE offerId = :offerId AND (personBId = :userId OR personAId = :userId)');
-						$s -> bindValue (':offerId', $jsonDecoded['offerId']);
-						$s -> bindValue (':userId', $_SESSION['id']);
+												WHERE id = :convId AND (personBId = :userIdB OR personAId = :userIdA)');
+						$s -> bindValue (':convId', $jsonDecoded -> convId);
+						$s -> bindValue (':userIdA', $_SESSION['id']);
+						$s -> bindValue (':userIdB', $_SESSION['id']);
 						$s -> execute();
-						
 						
 
 						if ($uczestnicy = $s -> fetch())
@@ -137,10 +140,16 @@
 							$sc -> bindValue (':userId', $_SESSION['id']);
 							$sc -> bindValue (':date', time());
 							$sc -> bindValue (':convId', $convId);
-							$sc -> bindValue (':content', $jsonDecoded['msgContent']);
+							$sc -> bindValue (':content', $jsonDecoded -> msgContent);
 							$sc -> execute ();
+							$lastMsg = $pdo -> lastInsertId ();
 							
-							
+							$sd = $pdo -> prepare('UPDATE conversations SET lastMsgId=:lastMsg WHERE id = :convId');
+							$sd -> bindValue(':lastMsg', $lastMsg);
+							$sd -> bindValue(':convId', $convId);
+							$sd -> execute();
+							$response = 'msgSent';
+
 							if ($uczestnicy[0] == $_SESSION['id'])	//my wysyłamy
 							{
 								$x = $pdo -> prepare ('UPDATE conversations
@@ -153,7 +162,7 @@
 														SET unreadA = 1
 														WHERE conversations.id = :convId');
 							}
-							$x -> bindValue (':convId', $jsonDecoded['convId']);
+							$x -> bindValue (':convId', $jsonDecoded -> convId);
 							$x -> execute ();
 						}
 						$response = 'msgSent';
@@ -169,13 +178,13 @@
 				}
 				break;
 			case 'sendMsgToOffer':
-				if (isset ($jsonDecoded['offerId']) && isNumeric($jsonDecoded['offerId']))
+				if (isset ($jsonDecoded -> offerId) && is_numeric($jsonDecoded -> offerId))
 				{
-					$jsonDecoded['msgContent'] = trim ( $jsonDecoded['msgContent'] );
-					if (strlen ( $jsonDecoded['msgContent'] ) > 0)
+					$jsonDecoded -> msgContent = trim ( $jsonDecoded -> msgContent );
+					if (strlen ( $jsonDecoded -> msgContent ) > 0)
 					{
 						$s = $pdo -> prepare ('SELECT id FROM conversations WHERE offerId = :offerId AND personBId = :userId');
-						$s -> bindValue (':offerId', $jsonDecoded['offerId']);
+						$s -> bindValue (':offerId', $jsonDecoded -> offerId);
 						$s -> bindValue (':userId', $_SESSION['id']);
 						$s -> execute();
 						
@@ -190,21 +199,21 @@
 						}
 						else
 						{	//tworzymy nową rozmowę
-							$sa = $pdo -> prepare ('SELECT authorId FROM offers WHERE offerId = :offerId');
-							$sa -> bindValue (':offerId', $jsonDecoded['offerId']);
+							$sa = $pdo -> prepare ('SELECT authorId FROM offers WHERE id = :offerId');
+							$sa -> bindValue (':offerId', $jsonDecoded -> offerId, PDO::PARAM_INT);
 							$sa -> execute ();
-							if ($offerAuthorId = $sa -> fetch())
+							$offerAuthorId = $sa -> fetch();
+							
+							if (is_numeric($offerAuthorId[0]))
 							{
 								$sb = $pdo -> prepare ('INSERT INTO conversations (offerId, personAId, personBId, unreadA, unreadB)
 														VALUES (:offerId, :ofAuthor, :userId, 1, 0)');
-			
-								$sb -> bindValue (':offerId', $jsonDecoded['offerId']);
+								
+								$sb -> bindValue (':offerId', $jsonDecoded -> offerId);
 								$sb -> bindValue (':userId', $_SESSION['id']);
 								$sb -> bindValue (':ofAuthor', $offerAuthorId[0]);
 								$sb -> execute ();
-								$convId = $pdo -> lastInsertId ();
-								
-								
+								$convId = $pdo -> lastInsertId ();								
 
 							}
 							else
@@ -219,9 +228,14 @@
 						$sc -> bindValue (':userId', $_SESSION['id']);
 						$sc -> bindValue (':date', time());
 						$sc -> bindValue (':convId', $convId);
-						$sc -> bindValue (':content', $jsonDecoded['msgContent']);
+						$sc -> bindValue (':content', $jsonDecoded -> msgContent);
 						$sc -> execute ();
+						$lastMsg = $pdo -> lastInsertId();
 
+						$sd = $pdo -> prepare('UPDATE conversations SET lastMsgId=:lastMsg WHERE id = :convId');
+						$sd -> bindValue(':lastMsg', $lastMsg);
+						$sd -> bindValue(':convId', $convId);
+						$sd -> execute();
 						$response = 'msgSent';
 
 					}

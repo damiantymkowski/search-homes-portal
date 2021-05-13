@@ -157,10 +157,12 @@
 		$response = "notLogged";
 	}
 
-	echo json_encode(array('response' => $response, 'parameters' => $parameters, 'postInfo' => $postInfo, 'dataInfo' => $dataInfo, 'photosUrl' => $photosUrl));
+	//echo json_encode(array('response' => $response, 'parameters' => $parameters, 'postInfo' => $postInfo, 'dataInfo' => $dataInfo, 'photosUrl' => $photosUrl));
 
 	function insertParameters ($offerId, $parametersArray)
 	{
+		echo json_encode($offerId);
+		return 0;
 		//offerId - id oferty
 		//tablica "parametersArray": klucz jest identyfikatorem parametru w bazie, a wartość to wartość parametru
 		//usuwamy obecne dla danej oferty parametry i wpisujemy nowe
@@ -179,7 +181,7 @@
 			$s -> bindValue(":offerId", $offerId);
 			$s -> bindValue(":value", $value);
 			$s -> execute();
-			$i+=$s->rowCount();
+			$i += $s -> rowCount();
 		}
 
 
