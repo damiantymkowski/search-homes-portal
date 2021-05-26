@@ -1,6 +1,7 @@
 import React, {
   MutableRefObject,
-  useContext, useReducer,
+  useContext,
+  useReducer,
   useRef,
   useState,
 } from "react";
@@ -8,8 +9,8 @@ import * as Styled from "./style.styles";
 import useLogin from "../../../hooks/useLogin";
 import { Eye, EyeOff } from "react-feather";
 import { Redirect } from "react-router-dom";
-import {initialState, reducer} from "../../../shared/Reducers/AuthReducer";
-import {AuthContext} from "../../../App";
+import { initialState, reducer } from "../../../shared/Reducers/AuthReducer";
+import { AuthContext } from "../../../App";
 
 const LoginForm = () => {
   const { handleInputChange, handleSubmit, loginInfo } = useLogin({
@@ -28,7 +29,7 @@ const LoginForm = () => {
       setDisplayPassword(false);
     }
   };
-  const {state} = React.useContext(AuthContext);
+  const { state } = React.useContext(AuthContext);
   if (state.isAuthenticated === false && loginInfo != "Pomyślnie zalogowano!") {
     return (
       <>

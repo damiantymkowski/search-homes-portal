@@ -72,7 +72,6 @@ const Advertisement = (props: { offer_id: string }) => {
 
         setInfo(response.data.postInfo);
         setAdditionalParams(response.data.dataInfo);
-        setLoading(false);
       })
       .catch(function (error) {});
   }, []);

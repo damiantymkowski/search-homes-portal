@@ -100,45 +100,45 @@ const Messages = () => {
         <Styled.Box>
           <Styled.Content>
             <Table bordered={false} striped hover>
-              {messages.map((message: IMessages) => {
-                return (
-                  <>
-                    <thead>
-                      <tr>
-                        <th>Użytkownik</th>
-                        <th colSpan={2}>Treść</th>
-                        <th>Ogłoszenie</th>
-                        <th>Wysłano</th>
-                        <th>Powiadomienia</th>
-                        <th>Czytaj</th>
-                      </tr>
-                    </thead>
+              <thead>
+                <tr>
+                  <th>Użytkownik</th>
+                  <th colSpan={2}>Treść</th>
+                  <th>Ogłoszenie</th>
+                  <th>Wysłano</th>
+                  <th>Powiadomienia</th>
+                  <th>Czytaj</th>
+                </tr>
+              </thead>
 
-                    <tbody>
-                      {messagesToOffers.map((message: IMessages) => {
-                        return (
-                          <tr>
-                            <td>{message.person}</td>
-                            <td colSpan={2}>{message.lastMsgContent}</td>
-                            <td>{message.offerTitle}</td>
-                            <td>{message.lastMsgDate}</td>
-                            <td>
-                              {parseInt(message.unread) > 0 ? (
-                                <Alert variant="danger">
-                                  Masz nieprzeczytaną wiadomość
-                                </Alert>
-                              ) : (
-                                ""
-                              )}
-                            </td>
-                            <td>
-                              <NavLink to={"/konwersacja" + message.convId}>
-                                Czytaj
-                              </NavLink>
-                            </td>
-                          </tr>
-                        );
-                      })}
+              <tbody>
+                {messagesToOffers.map((message: IMessages) => {
+                  return (
+                    <tr>
+                      <td>{message.person}</td>
+                      <td colSpan={2}>{message.lastMsgContent}</td>
+                      <td>{message.offerTitle}</td>
+                      <td>{message.lastMsgDate}</td>
+                      <td>
+                        {parseInt(message.unread) > 0 ? (
+                          <Alert variant="danger">
+                            Masz nieprzeczytaną wiadomość
+                          </Alert>
+                        ) : (
+                          ""
+                        )}
+                      </td>
+                      <td>
+                        <NavLink to={"/konwersacja" + message.convId}>
+                          Czytaj
+                        </NavLink>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {messages.map((message: IMessages) => {
+                  return (
+                    <>
                       <tr>
                         <td>{message.person}</td>
                         <td colSpan={2}>{message.lastMsgContent}</td>
@@ -159,10 +159,10 @@ const Messages = () => {
                           </NavLink>
                         </td>
                       </tr>
-                    </tbody>
-                  </>
-                );
-              })}
+                    </>
+                  );
+                })}
+              </tbody>
             </Table>
           </Styled.Content>
         </Styled.Box>
