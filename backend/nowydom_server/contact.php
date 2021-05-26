@@ -66,20 +66,20 @@
 												offers.id AS "offerId", offers.title AS "offerTitle", offers.miniature AS "offerMiniature"
 											FROM messages, users, offers, conversations
 											WHERE messages.conversationId = :convId
-												AND (conversations.personAId = :userId
+												AND (conversations.personAId = :userId 
 												OR conversations.personBId = :userId)
-												AND users.id = messages.authorId
-												AND offers.id = conversations.offerId
+												AND users.id = messages.authorId 
+												AND offers.id = conversations.offerId 
 												AND conversations.id = :convId
 											ORDER BY messages.date ASC');
-
+					
 					$x -> bindValue (':convId', $jsonDecoded -> convId);
 					$x -> bindValue (':userId', $_SESSION['id']);
 
 					if ($x -> execute ())
 					{
 						$convsMsgs = $x -> fetchAll (PDO::FETCH_ASSOC);
-
+						
 						if (isset ($convsMsgs[0]))
 						{
 							$response = 'messages';
@@ -130,7 +130,7 @@
 						$s -> bindValue (':userIdA', $_SESSION['id']);
 						$s -> bindValue (':userIdB', $_SESSION['id']);
 						$s -> execute();
-
+						
 
 						if ($uczestnicy = $s -> fetch())
 						{
@@ -143,7 +143,7 @@
 							$sc -> bindValue (':content', $jsonDecoded -> msgContent);
 							$sc -> execute ();
 							$lastMsg = $pdo -> lastInsertId ();
-
+							
 							$sd = $pdo -> prepare('UPDATE conversations SET lastMsgId=:lastMsg WHERE id = :convId');
 							$sd -> bindValue(':lastMsg', $lastMsg);
 							$sd -> bindValue(':convId', $convId);
@@ -203,17 +203,17 @@
 							$sa -> bindValue (':offerId', $jsonDecoded -> offerId, PDO::PARAM_INT);
 							$sa -> execute ();
 							$offerAuthorId = $sa -> fetch();
-
+							
 							if (is_numeric($offerAuthorId[0]))
 							{
 								$sb = $pdo -> prepare ('INSERT INTO conversations (offerId, personAId, personBId, unreadA, unreadB)
 														VALUES (:offerId, :ofAuthor, :userId, 1, 0)');
-
+								
 								$sb -> bindValue (':offerId', $jsonDecoded -> offerId);
 								$sb -> bindValue (':userId', $_SESSION['id']);
 								$sb -> bindValue (':ofAuthor', $offerAuthorId[0]);
 								$sb -> execute ();
-								$convId = $pdo -> lastInsertId ();
+								$convId = $pdo -> lastInsertId ();								
 
 							}
 							else
