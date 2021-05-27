@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {AuthContext} from "../App";
-import {initial, RegisterReducer} from "../shared/Reducers/RegisterReducer";
+import { AuthContext } from "../App";
+import { initial, RegisterReducer } from "../shared/Reducers/RegisterReducer";
 
 interface initialValues {
   email: string;
@@ -12,11 +12,9 @@ const useLogin = (initialValues: initialValues) => {
   const [inputs, setInputs] = useState(initialValues);
   const [currentElement, setCurrentElement] = useState("");
   const [loginInfo, setLoginInfo] = useState("");
-  const {dispatch} = React.useContext(AuthContext);
+  const { dispatch } = React.useContext(AuthContext);
 
   const handleSubmit = (e: React.FormEvent) => {
-
-
     axios({
       method: "post",
       url: "registrationLogging.php",
@@ -36,9 +34,9 @@ const useLogin = (initialValues: initialValues) => {
         setLoginInfo("Błędne hasło!");
       if (response.data.response === "successLogin") {
         dispatch({
-          type:"LOGIN",
-          payload: response.data.response
-        })
+          type: "LOGIN",
+          payload: response.data.response,
+        });
         setLoginInfo("Pomyślnie zalogowano!");
       }
     });

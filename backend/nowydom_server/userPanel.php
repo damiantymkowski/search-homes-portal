@@ -15,7 +15,6 @@
 	//wrongEmail - niewłaściwy aktualne email
 
 
-//TE byku, zastanów się Damian, czy potrzebujemy serio tego aktualnego maila w formularzu, czy wystarczy nowy email + haslo na potwierdzenie
 
 	session_start();
 

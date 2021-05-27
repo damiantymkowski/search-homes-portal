@@ -13,6 +13,8 @@ import AddOffer from "./pages/Offer/Add/AddOffer";
 import UpdateOffer from "./pages/Offer/Update/UpdateOffer";
 import Messages from "./pages/Messages/Messages";
 import Conversation from "./pages/Conversation/Conversation";
+import Admin from "./pages/Admin/Admin";
+import Manage from "./pages/Admin/Manage/Manage";
 
 type ContextType = {
   state: any;
@@ -61,6 +63,8 @@ function App() {
             <Route path="/logowanie" component={Login} />
             <Route path="/ogloszenie:id" component={Offer} />
             <Route path="/wyloguj" component={Logout} />
+            <Route path="/admin" component={Admin} />
+            <Route path="/admin-panel" component={Manage} />
           </Switch>
         </AnimatePresence>
       </Router>

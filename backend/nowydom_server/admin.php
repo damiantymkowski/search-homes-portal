@@ -85,7 +85,7 @@
                 $amount = $jsonDecoded -> amount;
             }
 
-            $x = $pdo -> prepare('SELECT * FROM reportedoffers LIMIT :a,:b'); //posty według daty
+            $x = $pdo -> prepare('SELECT * FROM reportedoffers'); //posty według daty
             $x -> bindValue(':a', $from);
             $x -> bindValue(':b', $amount);
             //$x -> bindValue(':timeCheck', time() - 2592000);                 //moderacja będzie przeprowadzana też na nieaktualnych postach
@@ -147,29 +147,31 @@
             $response = "listingReportedMessages";
         }
 
-        if ($jsonDecoded -> action == 'ban') //////////////Banowanie
+if ($jsonDecoded -> action == 'ban') //////////////Banowanie
         {
             if (isset ($jsonDecoded -> postId))
             {
-                $x = $pdo -> prepare('SELECT authorId FROM offers 
-                                        INNER JOIN reportedoffers 
-                                        ON offers.id = reportedoffers.offerId 
+                $x = $pdo -> prepare('SELECT authorId FROM offers
+                                        INNER JOIN reportedoffers
+                                        ON offers.id = reportedoffers.offerId
                                         WHERE reportedoffers.offerId = :offerId');
                 $x -> bindValue(":offerId", $jsonDecoded -> postId);                       //Damian to ID dostajesz w tablicy reportedOffers
             }
             else if (isset ($jsonDecoded -> messageId))
             {
-                $x = $pdo -> prepare('SELECT authorId FROM messages 
-                                        INNER JOIN reportedmessages 
-                                        ON messages.id = reportedmmessages.messageId 
+                $x = $pdo -> prepare('SELECT authorId FROM messages
+                                        INNER JOIN reportedmessages
+                                        ON messages.id = reportedmmessages.messageId
                                         WHERE reportedmmessages.messageId = :messageId');
                 $x -> bindValue(":messageId", $jsonDecoded -> messageId);                       //Damian to ID dostajesz w tablicy reportedMessages
             }
-           
-            $x -> execute();
-            $banId = $x -> fetch()[0] == 0;
 
-            $x = $pdo -> prepare('UPDATE users SET ban = 1 WHERE userId = :id');
+            $x -> execute();
+            $banId = $x -> fetch()[0];
+
+            print_r($banId);
+
+            $x = $pdo -> prepare('UPDATE users SET ban = 1 WHERE id = :id');
             $x -> bindValue(":id", $banId);
             $x -> execute();
 

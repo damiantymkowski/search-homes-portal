@@ -23,17 +23,17 @@
 	{
         if ($jsonDecoded -> action == 'addReport')////////////Zgłoszenie ogłoszenia do moderacji
         {
-            $x = $pdo -> prepare('SELECT COUNT(id) FROM reportedOffers WHERE offerId = :offerId AND reporterId = :reporterId');
-            $x -> bindValue(":offerId", $jsonDecoded -> postId);
-            $x -> bindValue(":reporterId", $_SESSION['id']);
+            $x = $pdo -> prepare('SELECT COUNT(id) FROM reportedoffers WHERE offerId = :offerId AND reporterId = :reporterId');
+            $x -> bindValue(":offerId", $jsonDecoded -> postId, PDO::PARAM_INT);
+            $x -> bindValue(":reporterId", $_SESSION['id'], PDO::PARAM_INT);
             $x -> execute();
 
-            if ($x -> fetch()[0] > 0)
+            if ($x -> fetch()[0] == 0)
             {
-                $x = $pdo -> prepare('INSERT INTO reportedOffers (reporterId, offerId, description) VALUES (:reporterId, :offerId, :description)');
-                $x -> bindValue(":reporterId", $_SESSION['id']);
+                $x = $pdo -> prepare('INSERT INTO reportedoffers (reporterId, offerId, description) VALUES (:reporterId, :offerId, :description)');
+                $x -> bindValue(":reporterId", $_SESSION['id'], PDO::PARAM_INT);
                 $x -> bindValue(":offerId", $jsonDecoded -> postId);
-                $x -> bindValue(":description", $jsonDecoded -> descriptionId);
+                $x -> bindValue(":description", $jsonDecoded -> description);
                 $x -> execute();
     
                 $response = "reportAdded";

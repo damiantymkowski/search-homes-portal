@@ -1,6 +1,7 @@
 import React, {
   MutableRefObject,
-  useContext, useReducer,
+  useContext,
+  useReducer,
   useRef,
   useState,
 } from "react";
@@ -19,7 +20,7 @@ const LoginForm = () => {
   const [displayPassword, setDisplayPassword] = useState(false);
   const passwordInput = useRef() as MutableRefObject<HTMLInputElement>;
 
-  const showPassword = (e:any) => {
+  const showPassword = (e: any) => {
     e.preventDefault();
     if (!displayPassword) {
       passwordInput.current.type = "text";
@@ -51,12 +52,11 @@ const LoginForm = () => {
                 ref={passwordInput}
               ></Styled.Input>
               <Styled.ShowPassword>
-                <Styled.ShowPasswordBtn onClick={(e)=>showPassword(e)}>
+                <Styled.ShowPasswordBtn onClick={(e) => showPassword(e)}>
                   {displayPassword ? <EyeOff /> : <Eye />}
                 </Styled.ShowPasswordBtn>
               </Styled.ShowPassword>
             </Styled.InputContainer>
-            {/*   <Styled.forgotPassword>Nie pamiętam hasła</Styled.forgotPassword>*/}
             <Styled.LoginButton>Zaloguj się</Styled.LoginButton>
             <Styled.LoginInfo>{loginInfo}</Styled.LoginInfo>
           </Styled.Form>

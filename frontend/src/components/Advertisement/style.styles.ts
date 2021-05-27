@@ -7,9 +7,9 @@ export const Title = styled.h3`
   font-size: 1.6em;
 `;
 
-export const Localization = styled.h4`
+export const Report = styled.h4`
   color: ${Colors.caramine_pink};
-  margin-top: -15px;
+  margin-top: 15px;
 `;
 
 export const FormContainer = styled.div`

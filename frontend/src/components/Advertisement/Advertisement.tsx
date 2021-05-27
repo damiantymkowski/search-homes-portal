@@ -4,8 +4,10 @@ import axios from "axios";
 import ImageGallery from "react-image-gallery";
 import { LatLngExpression } from "leaflet";
 import Map from "../Map/Map";
-import { Spinner } from "react-bootstrap";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import SendOfferMessageForm from "../Forms/SendOfferMessageForm/SendOfferMessageForm";
+import { useForm } from "react-hook-form";
+import Cookies from "js-cookie";
 
 interface infoType {
   Price: string;
@@ -23,9 +25,14 @@ const Advertisement = (props: { offer_id: string }) => {
   });
 
   const [additionalParams, setAdditionalParams] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState([]);
   const [position, setPosition] = useState([5, 4] as LatLngExpression);
+  const [show, setShow] = useState(false);
+  const [infoReport, setInfoReport] = useState("");
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     if (additionalParams.length > 0) {
@@ -75,6 +82,31 @@ const Advertisement = (props: { offer_id: string }) => {
       })
       .catch(function (error) {});
   }, []);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data: any) => {
+    axios({
+      method: "post",
+      url: "report.php",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        postId: parseInt(props.offer_id),
+        description: data.description,
+        action: "addReport",
+      },
+      withCredentials: true,
+    }).then((response) => {
+      if (response.data.response == "reportAdded")
+        setInfoReport("Zgłoszenie wysłane");
+    });
+  };
 
   if (loading == false) {
     return (
@@ -82,10 +114,39 @@ const Advertisement = (props: { offer_id: string }) => {
         <Styled.Container>
           <Styled.OfferContainer>
             <Styled.Title>{info.title}</Styled.Title>
-            <Styled.Localization>
-              Warszawa, Śródmieście ul. Ciasna
-            </Styled.Localization>
+            <Styled.Report>
+              <Button variant="warning" onClick={handleShow}>
+                Zgłoś ogłoszenie
+              </Button>
+            </Styled.Report>
 
+            <Modal show={show} onHide={handleClose}>
+              <Modal.Header>
+                <Modal.Title>Formularz zgłoszenia</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                  <Form.Group controlId="exampleForm.ControlTextarea1">
+                    <Form.Label>Treść zgłoszenia</Form.Label>
+                    <Form.Control
+                      {...register("description", { required: true })}
+                      as="textarea"
+                      rows={3}
+                    />
+                  </Form.Group>
+
+                  <Button variant="primary" type="submit">
+                    Wyślij zgłoszenie
+                  </Button>
+                  {infoReport}
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Zamknij
+                </Button>
+              </Modal.Footer>
+            </Modal>
             <Styled.Box>
               <ImageGallery
                 infinite={true}
