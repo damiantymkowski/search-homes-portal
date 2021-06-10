@@ -8,6 +8,7 @@ import ChangeEmailForm from "../../components/Forms/ChangeEmailForm/ChangeEmailF
 import ChangeUserDetailsForm from "../../components/Forms/ChangeUserDetailsForm/ChangeUserDetailsForm";
 import { Breadcrumb, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import DeleteUserOffer from "../../components/Forms/DeleteUserOffer/DeleteUserOffer";
 
 const User = () => {
   return (
@@ -24,6 +25,7 @@ const User = () => {
         </Breadcrumb>
         <Styled.Box>
           <Styled.Content>
+            <DeleteUserOffer />
             <ChangePasswordForm />
             <ChangeEmailForm />
             <ChangeUserDetailsForm />

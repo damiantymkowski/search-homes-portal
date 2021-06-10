@@ -11,6 +11,45 @@ $response = "";
 $results = array();
 $from = 0;
 $amount = 0;
+
+
+if (!isset($_GET['minprice']))
+{
+	$minprice = 0;
+}else
+{
+	$minprice = intval($_GET['minprice']);
+}
+
+
+if (!isset($_GET['price']))
+{
+	$maxprice = 99999999999999999999;
+}
+else
+{
+	$maxprice = intval($_GET['price']);
+}
+
+if (!isset($_GET['city']))
+{
+	$b = $pdo -> prepare ('SELECT offers.* from offers where offers.Price > :minp and offers.Price < :maxp and AND offers.date >= :timeCheck');
+}
+else
+{
+	$b = $pdo -> prepare ('SELECT offers.* from offers, datavalues where offers.Price > :minp and offers.Price < :maxp and AND offers.date >= :timeCheck AND datavalues.nameId = 3 AND datavalues.offerId = offers.id and datavalues.value = :mscwsc');
+	$b -> bindValue (':mscwsc', $_GET['location']);
+
+
+}
+$b -> bindValue (':minp', $minprice);
+$b -> bindValue (':maxp', $maxp);
+$b -> bindValue(':timeCheck', time()-2592000, PDO::PARAM_INT);
+
+$response = "searchResults";
+$b -> execute();
+
+$results = $b -> fetchAll (PDO::FETCH_ASSOC);
 /*
 zwróci pozycje spełniające zadane kryteria
 PRZYKŁADOWE ZAPYTANIE
@@ -39,7 +78,7 @@ PRZYKŁADOWE ZAPYTANIE
 			  lk = zawiera (SQLowe LIKE %wartość%)
 */
 
-
+/*
 switch ($jsonDecoded -> action)
 {
 	case 'search':
@@ -47,7 +86,7 @@ switch ($jsonDecoded -> action)
 			$from = 0;
 		else
 			$from = $jsonDecoded -> from;
-			
+
 
 		if (!isset ($jsonDecoded -> amount) || !is_numeric ($jsonDecoded -> amount) || $jsonDecoded -> amount > 100)
 			$amount = 20;
@@ -77,7 +116,7 @@ switch ($jsonDecoded -> action)
 								AND offers.date >= :timeCheck'
 								.$crit.
 								' LIMIT :amount OFFSET :from';
-						
+
 		$b -> bindValue(':timeCheck', time()-2592000, PDO::PARAM_INT);
 		$b -> bindValue(':amount', $amount, PDO::PARAM_INT);
 		$b -> bindValue(':from', $from, PDO::PARAM_INT);
@@ -88,13 +127,14 @@ switch ($jsonDecoded -> action)
 			$b -> bindValue(':cval'.$ck, $cv -> value);
 		}
 		$b -> execute();
-		
+
 		$results = $b -> fetchAll (PDO::FETCH_ASSOC);
 		$response = "searchResults";
-		
+
 		break;
 	default:
 		break;
 }
-
+*/
+echo json_encode (array ($response, $results));
 ?>

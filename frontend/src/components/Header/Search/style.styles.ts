@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Colors } from "../../../shared/Colors/style.styles";
+import React, { MutableRefObject } from "react";
 
 export const Box = styled.div`
   width: 60%;
@@ -55,7 +56,6 @@ export const SearchCity = styled.input`
 
 export const SearchButton = styled.button`
   padding: 11px;
-  width: 20%;
   border: none;
   color: ${Colors.white};
   background: ${Colors.caramine_pink};

@@ -15,6 +15,7 @@ import Messages from "./pages/Messages/Messages";
 import Conversation from "./pages/Conversation/Conversation";
 import Admin from "./pages/Admin/Admin";
 import Manage from "./pages/Admin/Manage/Manage";
+import SearchResult from "./pages/SearchResult/SearchResult";
 
 type ContextType = {
   state: any;
@@ -65,6 +66,7 @@ function App() {
             <Route path="/wyloguj" component={Logout} />
             <Route path="/admin" component={Admin} />
             <Route path="/admin-panel" component={Manage} />
+            <Route path="/wyszukiwarka" component={SearchResult} />
           </Switch>
         </AnimatePresence>
       </Router>
